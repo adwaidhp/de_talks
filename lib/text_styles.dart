@@ -26,8 +26,8 @@ class AppTextStyles {
   // Heading styles
   static const TextStyle heading1 = TextStyle(
     fontFamily: 'Manjari',
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
+    fontSize: 32,
+    // fontWeight: FontWeight.w700,
     color: AppColors.black,
   );
 
