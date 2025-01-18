@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/models/events.dart';
 import 'package:de_talks/services/event_service.dart';
@@ -7,8 +8,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Profilepage extends StatelessWidget {
+class Profilepage extends StatefulWidget {
   Profilepage({super.key});
+
+  @override
+  State<Profilepage> createState() => _ProfilepageState();
+}
+
+class _ProfilepageState extends State<Profilepage> {
+  int count = 0;
+
+  String name = '';
+  void getUserDetails() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId == null) {
+      return;
+    }
+
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userDoc.exists && userDoc.data() != null) {
+      setState(() {
+        count = userDoc.data()?['dayCount'] ?? 0;
+        name = userDoc.data()?['name'] ??
+            'Alex'; // Use 0 as a default if 'count' is not set
+      });
+    }
+  }
 
   Future<void> _launchSocialMedia(BuildContext context, String url) async {
     try {
@@ -31,17 +59,9 @@ class Profilepage extends StatelessWidget {
   final String bio =
       "I am on a journey to become the best version of myself. Every day is a new opportunity to grow and learn. Passionate about self-improvement and helping others along the way.";
 
-  List<EventItem> events = [
-    EventItem(title: 'Hope and Healing', status: 'Organised'),
-    EventItem(title: 'Mental Health Awareness', status: 'Attended'),
-    EventItem(title: 'Stress Management', status: 'Attended'),
-    // Add more items as needed
-  ];
-
   @override
   Widget build(BuildContext context) {
-    const int count = 30;
-    const name = "Alex Sanders";
+    getUserDetails();
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -81,18 +101,18 @@ class Profilepage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              name,
+                              'Hello, ${name.toUpperCase()}',
                               style: AppTextStyles.bold.copyWith(fontSize: 20),
                             ),
                             Row(
                               children: [
                                 Text(
-                                  'Day ',
+                                  'Streak ',
                                   style:
                                       AppTextStyles.bold.copyWith(fontSize: 16),
                                 ),
                                 Text(
-                                  '$count',
+                                  '${count.toString()}',
                                   style: AppTextStyles.bold.copyWith(
                                     fontSize: 18,
                                     color: AppColors.darkBlueContrast,
@@ -261,7 +281,7 @@ class Profilepage extends StatelessWidget {
                                   Container(
                                     width: 80,
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
+                                      horizontal: 6,
                                       vertical: 6,
                                     ),
                                     decoration: BoxDecoration(
@@ -276,8 +296,8 @@ class Profilepage extends StatelessWidget {
                                       event.organizerId ==
                                               FirebaseAuth
                                                   .instance.currentUser!.uid
-                                          ? 'Organised'
-                                          : 'Attended',
+                                          ? 'Organized'
+                                          : 'Registered',
                                       textAlign: TextAlign.center,
                                       style: AppTextStyles.bold.copyWith(
                                         fontSize: 12,
