@@ -2,7 +2,6 @@ import 'package:de_talks/pages/chat_screen.dart';
 import 'package:de_talks/pages/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
