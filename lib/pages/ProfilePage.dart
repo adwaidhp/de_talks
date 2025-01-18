@@ -19,6 +19,7 @@ class _ProfilepageState extends State<Profilepage> {
   int count = 0;
 
   String name = '';
+  String city = '';
   void getUserDetails() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -32,29 +33,30 @@ class _ProfilepageState extends State<Profilepage> {
     if (userDoc.exists && userDoc.data() != null) {
       setState(() {
         count = userDoc.data()?['dayCount'] ?? 0;
-        name = userDoc.data()?['name'] ??
-            'Alex'; // Use 0 as a default if 'count' is not set
+        name = userDoc.data()?['name'] ?? 'Alex';
+        city = userDoc.data()?['city'] ??
+            'Thrissur'; // Use 0 as a default if 'count' is not set
       });
     }
   }
 
-  Future<void> _launchSocialMedia(BuildContext context, String url) async {
-    try {
-      if (!await launchUrl(Uri.parse(url))) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Could not launch $url')),
-          );
-        }
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error launching URL: $e')),
-        );
-      }
-    }
-  }
+  // Future<void> _launchSocialMedia(BuildContext context, String url) async {
+  //   try {
+  //     if (!await launchUrl(Uri.parse(url))) {
+  //       if (context.mounted) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text('Could not launch $url')),
+  //         );
+  //       }
+  //     }
+  //   } catch (e) {
+  //     if (context.mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Error launching URL: $e')),
+  //       );
+  //     }
+  //   }
+  // }
 
   final String bio =
       "I am on a journey to become the best version of myself. Every day is a new opportunity to grow and learn. Passionate about self-improvement and helping others along the way.";
@@ -122,33 +124,40 @@ class _ProfilepageState extends State<Profilepage> {
                             ),
                             Row(
                               children: [
-                                GestureDetector(
-                                  onTap: () => _launchSocialMedia(
-                                    context,
-                                    'https://instagram.com',
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/instagram.svg',
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () => _launchSocialMedia(
-                                    context,
-                                    'https://x.com',
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/Twitter.svg',
-                                    colorFilter: const ColorFilter.mode(
-                                      Colors.black,
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 18,
-                                    width: 18,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
+                                Icon(Icons.location_on),
+                                Text(
+                                  '${city.toUpperCase()}',
+                                  style: AppTextStyles.bold,
+                                )
                               ],
+                              // children: [
+                              //   GestureDetector(
+                              //     onTap: () => _launchSocialMedia(
+                              //       context,
+                              //       'https://instagram.com',
+                              //     ),
+                              //     child: SvgPicture.asset(
+                              //       'assets/icons/instagram.svg',
+                              //     ),
+                              //   ),
+                              //   const SizedBox(width: 10),
+                              //   GestureDetector(
+                              //     onTap: () => _launchSocialMedia(
+                              //       context,
+                              //       'https://x.com',
+                              //     ),
+                              //     child: SvgPicture.asset(
+                              //       'assets/icons/Twitter.svg',
+                              //       colorFilter: const ColorFilter.mode(
+                              //         Colors.black,
+                              //         BlendMode.srcIn,
+                              //       ),
+                              //       height: 18,
+                              //       width: 18,
+                              //     ),
+                              //   ),
+                              //   const SizedBox(width: 10),
+                              // ],
                             ),
                           ],
                         ),

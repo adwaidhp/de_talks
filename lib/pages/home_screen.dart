@@ -238,22 +238,15 @@ class _HomePageState extends State<HomePage> {
                     const Row(
                       children: [
                         Text(
-                          'Hello ',
+                          'Hello !!',
                           style: TextStyle(
                             fontSize: 24,
+                            fontWeight: FontWeight.bold,
                             color: AppColors.black,
                           ),
                           textHeightBehavior: TextHeightBehavior(
                             applyHeightToFirstAscent: false,
                             applyHeightToLastDescent: false,
-                          ),
-                        ),
-                        Text(
-                          'Hello!',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.black,
                           ),
                         ),
                       ],
