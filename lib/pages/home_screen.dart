@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:de_talks/colors.dart';
 
+class VideoItem {
+  final String thumbnail;
+  final String link;
+  final String title;
+
+  const VideoItem({
+    required this.thumbnail,
+    required this.link,
+    required this.title,
+  });
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -12,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String currentQuote;
   final String username = "Alex";
+  late List<VideoItem> currentVideos;
 
   static const List<String> quotes = [
     "Stronger than yesterday, braver than ever.",
@@ -28,10 +41,39 @@ class _HomePageState extends State<HomePage> {
     "Don't watch the clock; do what it does. Keep going.",
   ];
 
+  Widget buildVideoContainer(VideoItem video, int index) {
+    return GestureDetector(
+      onTap: () {
+        print('Opening link: ${video.link}');
+        replaceVideo(index);
+      },
+      child: Container(
+        height: 200,
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: AssetImage(video.thumbnail),
+            fit: BoxFit.cover,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(0, 4),
+              blurRadius: 4,
+              color: Color.fromRGBO(0, 0, 0, 0.25),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     currentQuote = getRandomQuote();
+    currentVideos = getRandomVideos(3);
   }
 
   String getRandomQuote() {
@@ -45,6 +87,62 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  static const List<VideoItem> allVideos = [
+    VideoItem(
+      thumbnail: 'assets/images/video1.png',
+      link: '<linkhere>',
+      title: 'Video 1',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video2.png',
+      link: '<linkhere>',
+      title: 'Video 2',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video3.png',
+      link: '<linkhere>',
+      title: 'Video 3',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video4.png',
+      link: '<linkhere>',
+      title: 'Video 4',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video5.png',
+      link: '<linkhere>',
+      title: 'Video 5',
+    ),
+  ];
+
+  List<VideoItem> getRandomVideos(int count) {
+    final random = Random();
+    final availableVideos = List<VideoItem>.from(allVideos);
+    final selectedVideos = <VideoItem>[];
+
+    for (var i = 0; i < count; i++) {
+      final index = random.nextInt(availableVideos.length);
+      selectedVideos.add(availableVideos[index]);
+      availableVideos.removeAt(index);
+    }
+
+    return selectedVideos;
+  }
+
+  void replaceVideo(int index) {
+    setState(() {
+      final availableVideos =
+          allVideos.where((video) => !currentVideos.contains(video)).toList();
+
+      if (availableVideos.isNotEmpty) {
+        final random = Random();
+        final newVideo =
+            availableVideos[random.nextInt(availableVideos.length)];
+        currentVideos[index] = newVideo;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,72 +153,95 @@ class _HomePageState extends State<HomePage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    children: [
-                      Text(
-                        'Hello ',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: AppColors.black,
-                        ),
-                        textHeightBehavior: TextHeightBehavior(
-                          applyHeightToFirstAscent: false,
-                          applyHeightToLastDescent: false,
-                        ),
-                      ),
-                      Text(
-                        "Alex",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: refreshQuote,
-                    child: Container(
-                      height: 200,
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                            color: Color.fromRGBO(0, 0, 0, 0.25),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Text(
+                          'Hello ',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: AppColors.black,
                           ),
-                        ],
-                      ),
-                      child: Text(
-                        '"$currentQuote"',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 25,
-                          height: 1.8,
-                          fontStyle: FontStyle.italic,
-                          color: AppColors.black,
+                          textHeightBehavior: TextHeightBehavior(
+                            applyHeightToFirstAscent: false,
+                            applyHeightToLastDescent: false,
+                          ),
+                        ),
+                        Text(
+                          "Alex",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: refreshQuote,
+                      child: Container(
+                        height: 200,
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.grey,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(0, 4),
+                              blurRadius: 4,
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          '"$currentQuote"',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 25,
+                            height: 1.8,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Motivational Videos',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          ...currentVideos.asMap().entries.map(
+                                (entry) =>
+                                    buildVideoContainer(entry.value, entry.key),
+                              ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
