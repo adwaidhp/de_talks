@@ -1,8 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
+import 'dart:async';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  bool _isLoaded = false;
+  Timer? _animationTimer;
+
+  static const int pauseTime = 1000;
+  static const int animationTime = 1500;
+
+  void _startAnimationCycle() {
+    setState(() => _isLoaded = false);
+    Future.delayed(Duration(milliseconds: pauseTime), () {
+      setState(() => _isLoaded = true);
+      Future.delayed(Duration(milliseconds: animationTime + pauseTime), () {
+        setState(() => _isLoaded = false);
+
+        Future.delayed(Duration(milliseconds: animationTime), () {
+          _startAnimationCycle();
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startAnimationCycle();
+  }
+
+  @override
+  void dispose() {
+    _animationTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +73,19 @@ class WelcomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
+              AnimatedContainer(
+                duration: Duration(milliseconds: animationTime),
+                curve: Curves.easeInOut,
                 padding: const EdgeInsets.symmetric(vertical: 24),
+                transform: Matrix4.identity()
+                  ..translate(200.0, 100.0)
+                  ..rotateZ(_isLoaded ? 0 : -(45 * 3.14159) / 180)
+                  ..scale(_isLoaded ? 1.0 : 0.6)
+                  ..translate(-205.0, -100.0),
                 child: Image.asset(
                   'assets/images/logo.png',
-                  width: 300,
+                  width: 400,
+                  height: 200,
                   fit: BoxFit.contain,
                 ),
               ),
