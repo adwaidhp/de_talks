@@ -3,6 +3,7 @@ import 'package:de_talks/colors.dart';
 import 'dart:math' show pi;
 import 'dart:math' show Random;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:de_talks/text_styles.dart';
 
 class Event {
   final String title;
@@ -109,9 +110,8 @@ class _EventCardState extends State<EventCard> {
               child: Text(
                 widget.event.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: AppTextStyles.bold.copyWith(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
               ),
@@ -120,7 +120,7 @@ class _EventCardState extends State<EventCard> {
         ),
         if (widget.event.isDeletable)
           Positioned(
-            top: 16,
+            top: 25,
             right: 24,
             child: GestureDetector(
               onTap: _handleDelete,
@@ -181,7 +181,7 @@ class _EventCardState extends State<EventCard> {
           children: [
             Text(
               widget.event.description,
-              style: const TextStyle(
+              style: AppTextStyles.bold.copyWith(
                 fontSize: 14,
                 color: AppColors.black,
               ),
@@ -194,7 +194,7 @@ class _EventCardState extends State<EventCard> {
                 Expanded(
                   child: Text(
                     widget.event.venue,
-                    style: const TextStyle(
+                    style: AppTextStyles.bold.copyWith(
                       fontSize: 14,
                       color: AppColors.black,
                     ),
@@ -209,7 +209,7 @@ class _EventCardState extends State<EventCard> {
                 const SizedBox(width: 4),
                 Text(
                   '${widget.event.date.day}/${widget.event.date.month}/${widget.event.date.year} at ${widget.event.date.hour}:${widget.event.date.minute.toString().padLeft(2, '0')}',
-                  style: const TextStyle(
+                  style: AppTextStyles.bold.copyWith(
                     fontSize: 14,
                     color: AppColors.black,
                   ),
@@ -217,16 +217,6 @@ class _EventCardState extends State<EventCard> {
               ],
             ),
             const SizedBox(height: 12),
-            Center(
-              child: Text(
-                'Tap to flip back',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black.withOpacity(0.5),
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -300,20 +290,37 @@ class EventsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
                 child: Text(
-                  'My Events',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: AppColors.black,
-                    fontWeight: FontWeight.normal,
+                  'My Events.',
+                  style: AppTextStyles.heading1.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
               ...events.map((event) => EventCard(event: event)).toList(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 100),
             ],
+          ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 100.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            // Add event creation logic here
+          },
+          backgroundColor: AppColors.black,
+          child: SvgPicture.asset(
+            'assets/icons/plus.svg',
+            colorFilter: const ColorFilter.mode(
+              AppColors.darkBlueContrast,
+              BlendMode.srcIn,
+            ),
+            width: 24,
+            height: 24,
           ),
         ),
       ),

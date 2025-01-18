@@ -1,5 +1,6 @@
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/pages/ProfilePage.dart';
+import 'package:de_talks/pages/events.dart';
 import 'package:de_talks/pages/home_screen.dart';
 import 'package:de_talks/pages/supportpage.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,13 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
   // Define the specific blue color
-  final Color activeBlue = Color(0xFF2DB3F6);
+  final Color activeBlue = AppColors.darkBlueContrast;
 
   final List<Widget> _pages = [
     HomePage(),
     SupportPage(),
     Profilepage(),
-    Scaffold(body: Center(child: Text('Updates'))),
+    EventsPage(),
   ];
 
   void _navigateBottomBar(int index) {
@@ -39,7 +40,7 @@ class _NavigationState extends State<Navigation> {
       colorFilter: ColorFilter.mode(
         isSelected
             ? activeBlue // Active icon color - Blue
-            : Colors.black, // Inactive icon color
+            : activeBlue, // Inactive icon color
         BlendMode.srcIn,
       ),
     );
@@ -66,7 +67,7 @@ class _NavigationState extends State<Navigation> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: Container(
-              color: AppColors.grey,
+              color: AppColors.black,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
@@ -107,7 +108,7 @@ class _NavigationState extends State<Navigation> {
         fontSize: 14,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
-      backgroundColor: Colors.black, // Background when selected
+      backgroundColor: AppColors.grey, // Background when selected
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       margin: EdgeInsets.symmetric(horizontal: 4),
       borderRadius: BorderRadius.circular(20),

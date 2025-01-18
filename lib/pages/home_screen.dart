@@ -1,3 +1,4 @@
+import 'package:de_talks/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:de_talks/colors.dart';
@@ -259,13 +260,11 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: Text(
-                          '"$currentQuote"',
+                          '" $currentQuote "',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 25,
-                            height: 1.8,
+                          style: AppTextStyles.bold.copyWith(
                             fontStyle: FontStyle.italic,
-                            color: AppColors.black,
+                            fontSize: 20,
                           ),
                         ),
                       ),
