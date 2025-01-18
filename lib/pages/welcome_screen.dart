@@ -1,3 +1,4 @@
+import 'package:de_talks/pages/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
 import 'dart:async';
@@ -95,6 +96,7 @@ class _WelcomePageState extends State<WelcomePage>
                 builder: (context, child) {
                   return Container(
                     padding: const EdgeInsets.symmetric(vertical: 24),
+                    width: double.infinity,
                     alignment: Alignment.center,
                     child: Transform(
                       alignment: Alignment.center,
@@ -138,8 +140,8 @@ class _WelcomePageState extends State<WelcomePage>
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          // TODO: Navigate to login/register page
-                          print('Navigate to login/register');
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const RegisterScreen()));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.black,
