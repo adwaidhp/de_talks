@@ -21,6 +21,16 @@ class _CreatePageState extends State<CreatePage> {
   int _selectedDay = DateTime.now().day;
 
   @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _selectedYear = now.year;
+    _selectedMonth = now.month;
+    _selectedDay = now.day;
+    _selectedDate = now;
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
@@ -124,25 +134,35 @@ class _CreatePageState extends State<CreatePage> {
                     children: [
                       // Month Selector
                       Expanded(
-                        child: ListWheelScrollView(
+                        child: ListWheelScrollView.useDelegate(
                           itemExtent: 50,
-                          children: List.generate(12, (index) {
-                            return Center(
-                              child: Text(
-                                '${index + 1}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.black,
-                                  fontWeight: _selectedMonth == index + 1
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                          diameterRatio: 1.5,
+                          squeeze: 0.8,
+                          physics: const FixedExtentScrollPhysics(),
+                          childDelegate: ListWheelChildBuilderDelegate(
+                            childCount: 12,
+                            builder: (context, index) {
+                              return Center(
+                                child: Text(
+                                  _getMonthName(index + 1),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            },
+                          ),
                           onSelectedItemChanged: (index) {
                             setState(() {
                               _selectedMonth = index + 1;
+                              int maxDays =
+                                  DateTime(_selectedYear, _selectedMonth + 1, 0)
+                                      .day;
+                              if (_selectedDay > maxDays) {
+                                _selectedDay = maxDays;
+                              }
                               _selectedDate = DateTime(
                                   _selectedYear, _selectedMonth, _selectedDay);
                             });
@@ -151,22 +171,26 @@ class _CreatePageState extends State<CreatePage> {
                       ),
                       // Day Selector
                       Expanded(
-                        child: ListWheelScrollView(
+                        child: ListWheelScrollView.useDelegate(
                           itemExtent: 50,
-                          children: List.generate(31, (index) {
-                            return Center(
-                              child: Text(
-                                '${index + 1}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.black,
-                                  fontWeight: _selectedDay == index + 1
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                          diameterRatio: 1.5,
+                          squeeze: 0.8,
+                          physics: const FixedExtentScrollPhysics(),
+                          childDelegate: ListWheelChildBuilderDelegate(
+                            childCount: 31,
+                            builder: (context, index) {
+                              return Center(
+                                child: Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            },
+                          ),
                           onSelectedItemChanged: (index) {
                             setState(() {
                               _selectedDay = index + 1;
@@ -178,23 +202,27 @@ class _CreatePageState extends State<CreatePage> {
                       ),
                       // Year Selector
                       Expanded(
-                        child: ListWheelScrollView(
+                        child: ListWheelScrollView.useDelegate(
                           itemExtent: 50,
-                          children: List.generate(10, (index) {
-                            int year = DateTime.now().year + index;
-                            return Center(
-                              child: Text(
-                                '$year',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.black,
-                                  fontWeight: _selectedYear == year
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                          diameterRatio: 1.5,
+                          squeeze: 0.8,
+                          physics: const FixedExtentScrollPhysics(),
+                          childDelegate: ListWheelChildBuilderDelegate(
+                            childCount: 10,
+                            builder: (context, index) {
+                              int year = DateTime.now().year + index;
+                              return Center(
+                                child: Text(
+                                  '$year',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            },
+                          ),
                           onSelectedItemChanged: (index) {
                             setState(() {
                               _selectedYear = DateTime.now().year + index;
@@ -241,6 +269,24 @@ class _CreatePageState extends State<CreatePage> {
         );
       },
     );
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return months[month - 1];
   }
 
   @override
@@ -432,7 +478,7 @@ class _CreatePageState extends State<CreatePage> {
                                   child: Text(
                                     _selectedDate == null
                                         ? 'Select Date'
-                                        : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                                        : '${_selectedDay.toString().padLeft(2, '0')}/${_getMonthName(_selectedMonth)}/${_selectedYear}',
                                     style: TextStyle(color: AppColors.black),
                                   ),
                                 ),
