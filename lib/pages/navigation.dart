@@ -1,3 +1,4 @@
+import 'package:de_talks/colors.dart';
 import 'package:de_talks/pages/home_screen.dart';
 import 'package:de_talks/pages/supportpage.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class _NavigationState extends State<Navigation> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: Container(
-            color: Colors.white,
+            color: AppColors.grey,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
