@@ -1,5 +1,6 @@
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/pages/chat_screen.dart';
+import 'package:de_talks/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -124,13 +125,11 @@ class _SupportPageState extends State<SupportPage> {
                           ),
                         ],
                       ),
-                      child: const Center(
+                      child:  Center(
                         child: Text(
                           "🚨Report Drug Abuse🚨",
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.black,
+                          style: AppTextStyles.bold.copyWith(
+                            fontSize: 19,
                           ),
                         ),
                       ),
@@ -207,14 +206,10 @@ class _SupportPageState extends State<SupportPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
+                           Text(
                             "National Toll Free\n De-Addiction Helpline.",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.normal,
-                              color: AppColors.black,
-                            ),
+                            style:AppTextStyles.bold.copyWith(fontSize: 24,),
                           ),
                           const SizedBox(height: 16),
                           InkWell(
