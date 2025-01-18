@@ -38,13 +38,22 @@ class _CreatePageState extends State<CreatePage> {
               primary: AppColors.black,
               onPrimary: Colors.white,
               surface: AppColors.grey,
+              onSurface: AppColors.black,
+              secondary: AppColors.black,
+              onSecondary: Colors.white,
             ),
-            dialogBackgroundColor: AppColors.grey,
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.black,
+              ),
+            ),
+            dialogBackgroundColor: Colors.white,
           ),
           child: child!,
         );
       },
     );
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -209,15 +218,10 @@ class _CreatePageState extends State<CreatePage> {
                             labelStyle: TextStyle(color: AppColors.black),
                             filled: true,
                             fillColor: AppColors.grey,
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: SvgPicture.asset(
-                                'assets/icons/location.svg',
-                                colorFilter: ColorFilter.mode(
-                                  AppColors.black.withOpacity(0.6),
-                                  BlendMode.srcIn,
-                                ),
-                              ),
+                            prefixIcon: Icon(
+                              Icons.location_on,
+                              color: AppColors.black.withOpacity(0.6),
+                              size: 24,
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -255,14 +259,10 @@ class _CreatePageState extends State<CreatePage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/calendar.svg',
-                                    colorFilter: ColorFilter.mode(
-                                      AppColors.black.withOpacity(0.6),
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 24,
-                                    width: 24,
+                                  child: Icon(
+                                    Icons.calendar_today,
+                                    color: AppColors.black.withOpacity(0.6),
+                                    size: 24,
                                   ),
                                 ),
                                 Expanded(
@@ -307,14 +307,10 @@ class _CreatePageState extends State<CreatePage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/clock.svg',
-                                    colorFilter: ColorFilter.mode(
-                                      AppColors.black.withOpacity(0.6),
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 24,
-                                    width: 24,
+                                  child: Icon(
+                                    Icons.access_time,
+                                    color: AppColors.black.withOpacity(0.6),
+                                    size: 24,
                                   ),
                                 ),
                                 Expanded(
