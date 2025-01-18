@@ -1,4 +1,5 @@
 import 'package:de_talks/colors.dart';
+import 'package:de_talks/pages/ProfilePage.dart';
 import 'package:de_talks/pages/home_screen.dart';
 import 'package:de_talks/pages/supportpage.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _NavigationState extends State<Navigation> {
   final List<Widget> _pages = [
     HomePage(),
     SupportPage(),
-    Scaffold(body: Center(child: Text('Profile'))),
+    Profilepage(),
     Scaffold(body: Center(child: Text('Updates'))),
   ];
 
