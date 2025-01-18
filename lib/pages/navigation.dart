@@ -1,4 +1,5 @@
 import 'package:de_talks/pages/home_screen.dart';
+import 'package:de_talks/pages/supportpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +18,7 @@ class _NavigationState extends State<Navigation> {
 
   final List<Widget> _pages = [
     HomePage(),
-    Scaffold(body: Center(child: Text('Support'))),
+    SupportPage(),
     Scaffold(body: Center(child: Text('Profile'))),
     Scaffold(body: Center(child: Text('Updates'))),
   ];
