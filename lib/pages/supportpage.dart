@@ -128,7 +128,7 @@ class _SupportPageState extends State<SupportPage> {
                       ),
                       child: Center(
                         child: Text(
-                          "🚨Report Drug Abuse🚨",
+                          "🚨 Report Drug Abuse 🚨",
                           style: AppTextStyles.bold.copyWith(
                             fontSize: 19,
                           ),
@@ -271,11 +271,22 @@ class _SupportPageState extends State<SupportPage> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          "Urge Surfing",
-                          style: AppTextStyles.bold.copyWith(
-                            fontSize: 19,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/caution.svg',
+                              height: 40,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "I have an Urge",
+                              style: AppTextStyles.bold.copyWith(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
