@@ -394,7 +394,7 @@ class _EventsPageState extends State<EventsPage> {
                   Positioned(
                     right: 15,
                     child: SvgPicture.asset(
-                      'assets/icons/plus.svg',
+                      'assets/icons/Plus.svg',
                       colorFilter: const ColorFilter.mode(
                         AppColors.darkBlueContrast,
                         BlendMode.srcIn,
