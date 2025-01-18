@@ -178,8 +178,8 @@ class SupportPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SvgPicture.asset(
-                              'assets/icons/Support.svg',
-                              height: 40,
+                              'assets/icons/Phone.svg',
+                              height: 30,
                               width: 40,
                             ),
                             const SizedBox(width: 10),
