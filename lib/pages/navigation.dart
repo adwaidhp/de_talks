@@ -67,7 +67,7 @@ class _NavigationState extends State<Navigation> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: Container(
-              color: AppColors.black,
+              color: AppColors.grey,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
@@ -108,7 +108,7 @@ class _NavigationState extends State<Navigation> {
         fontSize: 14,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
-      backgroundColor: AppColors.grey, // Background when selected
+      backgroundColor: AppColors.black, // Background when selected
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       margin: EdgeInsets.symmetric(horizontal: 4),
       borderRadius: BorderRadius.circular(20),

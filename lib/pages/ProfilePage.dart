@@ -58,8 +58,48 @@ class _ProfilepageState extends State<Profilepage> {
   //   }
   // }
 
-  final String bio =
-      "I am on a journey to become the best version of myself. Every day is a new opportunity to grow and learn. Passionate about self-improvement and helping others along the way.";
+  final List<String> pledges = [
+    "Walk for 20 minutes.",
+    "Write down 5 reasons you're proud of yourself.",
+    "Perform 3 sets of 10 push-ups, 15 squats, and a 30-second plank.",
+    "Practice 10 minutes of deep breathing.",
+    "Take a 30-minute walk in nature.",
+    "Write down 3 things you're grateful for.",
+    "Share a positive thought with someone supportive.",
+    "Do a 10-minute gentle yoga session.",
+    "Spend 20 minutes decluttering a small space.",
+    "Try a circuit of 10 lunges, 10 push-ups, and 15 jumping jacks.",
+    "Journal for 10 minutes about your feelings.",
+    "Listen to calming music for 15 minutes.",
+    "Spend 30 minutes doing an activity you enjoy.",
+    "Meditate for 10 minutes.",
+    "Cook and eat a healthy meal.",
+    "Compliment yourself out loud.",
+    "Walk or jog 3 kilometers at your own pace.",
+    "Watch an uplifting video or read an inspiring story.",
+    "Do a 15-minute stretching routine.",
+    "Reflect on 3 small wins from your week.",
+    "Practice a guided body scan meditation.",
+    "Spend 1 hour screen-free before bed.",
+    "Write a letter to your future self about your goals.",
+    "Take a mindful walk, focusing on your surroundings.",
+    "Try 3 new yoga poses and hold each for a minute.",
+    "Draw, paint, or create something for 20 minutes.",
+    "Share one positive thing from your day with a loved one.",
+    "Perform a 2-minute wall sit.",
+    "Read a chapter of an inspiring book.",
+    "Write down 3 affirmations and repeat them to yourself.",
+    "Plan your meals for the next day.",
+    "Take 10 deep breaths when you wake up.",
+    "Stand outside and take in the sunrise or sunset.",
+    "Spend 15 minutes in nature observing the details.",
+    "Reflect on a challenging moment and how you overcame it.",
+    "Do 50 jumping jacks.",
+    "Spend 15 minutes organizing something small, like a drawer.",
+    "Stretch your body for 5 minutes before bed.",
+    "Write down one positive memory from your past.",
+    "Do a 5-minute gratitude meditation."
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -169,16 +209,37 @@ class _ProfilepageState extends State<Profilepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Bio.',
+                        "Today's Pledge.",
                         style: AppTextStyles.bold.copyWith(fontSize: 20),
                       ),
                       GestureDetector(
-                        onTap: () {},
-                        child: SvgPicture.asset('assets/icons/edit.svg'),
+                        onTap: () {
+                          setState(() async {
+                            count++;
+                            SnackBar(
+                                content: Text(
+                                    '${7 - (count % 7)} days to acheive next badge!! '));
+                            final userId =
+                                FirebaseAuth.instance.currentUser?.uid;
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(userId)
+                                .update({'dayCount': count});
+                          });
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AppColors.darkerGrey),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child:
+                                  Text("Completed", style: AppTextStyles.bold),
+                            )),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(15),
@@ -194,7 +255,7 @@ class _ProfilepageState extends State<Profilepage> {
                       ],
                     ),
                     child: Text(
-                      bio,
+                      pledges[count],
                       style: AppTextStyles.bold.copyWith(
                         fontSize: 16,
                         color: Colors.black87,
@@ -211,7 +272,7 @@ class _ProfilepageState extends State<Profilepage> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: List.generate(
-                        6,
+                        (count / 7).floor() + 1,
                         (index) => Container(
                           margin: const EdgeInsets.only(right: 15),
                           width: 150,
@@ -247,7 +308,7 @@ class _ProfilepageState extends State<Profilepage> {
                         .getUserEvents(FirebaseAuth.instance.currentUser!.uid),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
-                        return SelectableText('Error: ${snapshot.error}');
+                        return Text('Error: ${snapshot.error}');
                       }
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
