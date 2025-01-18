@@ -1,4 +1,5 @@
 import 'package:de_talks/colors.dart';
+import 'package:de_talks/pages/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,8 +60,12 @@ class SupportPage extends StatelessWidget {
     }
   }
 
-  void _onChatButtonPressed() {
-    // Add your chat functionality here
+  void _onChatButtonPressed(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(),
+      ),
+    );
   }
 
   @override
@@ -232,7 +237,13 @@ class SupportPage extends StatelessWidget {
           bottom: MediaQuery.of(context).padding.bottom + 5,
         ),
         child: FloatingActionButton(
-          onPressed: _onChatButtonPressed,
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(),
+              ),
+            );
+          },
           backgroundColor: AppColors.lightBlueAccent,
           shape: const CircleBorder(),
           elevation: 4.0,
