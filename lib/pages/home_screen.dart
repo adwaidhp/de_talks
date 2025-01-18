@@ -1,6 +1,6 @@
 import 'package:de_talks/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:math' show Random, pi;
 import 'package:de_talks/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   late String currentQuote;
   final String username = "Alex";
   late List<VideoItem> currentVideos;
+  final Random _random = Random();
 
   static const List<String> quotes = [
     "Stronger than yesterday, braver than ever.",
@@ -249,7 +250,16 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppColors.grey,
+                          gradient: RadialGradient(
+                            center: Alignment(_random.nextDouble() * 2 - 1,
+                                _random.nextDouble() * 2 - 1),
+                            radius: 1.0,
+                            colors: [
+                              AppColors.white.withOpacity(0.7),
+                              AppColors.darkBlueContrast.withOpacity(0.9),
+                            ],
+                            stops: [0.0, 0.7],
+                          ),
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: const [
                             BoxShadow(
