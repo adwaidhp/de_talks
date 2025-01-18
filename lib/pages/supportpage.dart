@@ -1,5 +1,6 @@
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/pages/chat_screen.dart';
+import 'package:de_talks/pages/urgesurf.dart';
 import 'package:de_talks/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -71,7 +72,7 @@ class _SupportPageState extends State<SupportPage> {
   void _onChatButtonPressed(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ChatScreen(),
+        builder: (context) => UrgeSurfingPage(),
       ),
     );
   }
@@ -125,13 +126,73 @@ class _SupportPageState extends State<SupportPage> {
                           ),
                         ],
                       ),
-                      child:  Center(
+                      child: Center(
                         child: Text(
                           "🚨Report Drug Abuse🚨",
                           style: AppTextStyles.bold.copyWith(
                             fontSize: 19,
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 50),
+                // Helpline Container
+                Center(
+                  child: GestureDetector(
+                    onTap: () => _callHelpline(context),
+                    child: Container(
+                      height: 200,
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.black,
+                          width: 2,
+                        ),
+                        color: AppColors.grey,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 4,
+                            color: AppColors.blackOverlay,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "National Toll Free\n De-Addiction Helpline.",
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.bold.copyWith(fontSize: 24),
+                          ),
+                          const SizedBox(height: 16),
+                          InkWell(
+                            onTap: () => _callHelpline(context),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/Phone.svg',
+                                  height: 30,
+                                  width: 30,
+                                ),
+                                const SizedBox(width: 10),
+                                const Text(
+                                  "1800 - 11 - 0031",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -180,10 +241,16 @@ class _SupportPageState extends State<SupportPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                // Helpline Container
+                // New UrgeSurfingPage Container
                 Center(
                   child: GestureDetector(
-                    onTap: () => _callHelpline(context),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => UrgeSurfingPage(),
+                        ),
+                      );
+                    },
                     child: Container(
                       height: 200,
                       width: double.infinity,
@@ -203,38 +270,13 @@ class _SupportPageState extends State<SupportPage> {
                           ),
                         ],
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                           Text(
-                            "National Toll Free\n De-Addiction Helpline.",
-                            textAlign: TextAlign.center,
-                            style:AppTextStyles.bold.copyWith(fontSize: 24,),
+                      child: Center(
+                        child: Text(
+                          "Urge Surfing",
+                          style: AppTextStyles.bold.copyWith(
+                            fontSize: 19,
                           ),
-                          const SizedBox(height: 16),
-                          InkWell(
-                            onTap: () => _callHelpline(context),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/Phone.svg',
-                                  height: 30,
-                                  width: 30,
-                                ),
-                                const SizedBox(width: 10),
-                                const Text(
-                                  "1800 - 11 - 0031",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
