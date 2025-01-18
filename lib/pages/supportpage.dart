@@ -4,8 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SupportPage extends StatelessWidget {
+class SupportPage extends StatefulWidget {
   const SupportPage({super.key});
+
+  @override
+  State<SupportPage> createState() => _SupportPageState();
+}
+
+class _SupportPageState extends State<SupportPage> {
+  bool isHovered = false;
 
   // Constants
   static const String _ncbManasUrl = 'https://www.ncbmanas.gov.in/createTicket';
@@ -236,25 +243,53 @@ class SupportPage extends StatelessWidget {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 5,
         ),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ChatScreen(),
+        child: MouseRegion(
+          onEnter: (_) => setState(() => isHovered = true),
+          onExit: (_) => setState(() => isHovered = false),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: isHovered ? 110 : 60,
+            height: 60,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(),
+                  ),
+                );
+              },
+              backgroundColor: AppColors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
               ),
-            );
-          },
-          backgroundColor: AppColors.black,
-          shape: const CircleBorder(),
-          elevation: 4.0,
-          child: SvgPicture.asset(
-            'assets/icons/Chat.svg',
-            colorFilter: ColorFilter.mode(
-              AppColors.darkBlueContrast,
-              BlendMode.srcIn,
+              elevation: 4.0,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.centerRight,
+                children: [
+                  if (isHovered)
+                    Positioned(
+                      right: 60,
+                      child: const Text(
+                        'Chat',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  Positioned(
+                    right: 15,
+                    child: SvgPicture.asset(
+                      'assets/icons/Chat.svg',
+                      colorFilter: ColorFilter.mode(
+                        AppColors.darkBlueContrast,
+                        BlendMode.srcIn,
+                      ),
+                      height: 30,
+                      width: 30,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            height: 30,
-            width: 30,
           ),
         ),
       ),
