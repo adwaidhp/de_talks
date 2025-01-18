@@ -156,6 +156,16 @@ class _HomePageState extends State<HomePage> {
           'https://www.youtube.com/watch?v=_rBPwu2uS-w&ab_channel=Kurzgesagt%E2%80%93InaNutshell',
       title: 'Smoking kills',
     ),
+    VideoItem(
+      thumbnail: 'assets/images/video6.png',
+      link: 'https://youtu.be/FuooVrSpffk?si=Hry_pC4SsgDsSX2c',
+      title: 'The Stigma of Addiction | Tony Hoffman | TEDxFresnoState',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video7.png',
+      link: 'https://youtu.be/Wh9O3-ciOYs?si=D4cps3c-9a-2mwyr',
+      title: 'Finding sobriety on a mountaintop | Scott Strode | TEDxMileHigh',
+    ),
   ];
 
   List<VideoItem> getRandomVideos(int count) {
@@ -259,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                     Padding(
                       padding: EdgeInsets.all(0.0),
                       child: Column(
@@ -293,6 +303,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              const SizedBox(height: 50),
             ],
           ),
         ),
