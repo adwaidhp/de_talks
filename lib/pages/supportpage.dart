@@ -1,4 +1,6 @@
+import 'package:de_talks/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SupportPage extends StatelessWidget {
   const SupportPage({super.key});
@@ -21,132 +23,185 @@ class SupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 23),
-            child: Text(
-              "Support",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 32,
-              ),
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/SupportPageBg.png'),
+            fit: BoxFit.cover,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 23),
-            child: GestureDetector(
-              onTap: _onReportDrugAbuse,
-              child: Container(
-                width: 357,
-                height: 151,
-                padding: const EdgeInsets.all(23),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCFE7F3),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    "🚨Report Drug Abuse🚨",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 23),
+              child: Text(
+                "Support",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 32,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          const Padding(
-            padding: EdgeInsets.only(left: 23),
-            child: Text(
-              "Resources",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 32,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 23),
-            child: GestureDetector(
-              onTap: _onSupportSection2,
-              child: Container(
-                width: 357,
-                height: 151,
-                padding: const EdgeInsets.all(23),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCFE7F3),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/vimukthi.png',
-                        height: 80,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Vimukthi Centers",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 23),
+              child: GestureDetector(
+                onTap: _onReportDrugAbuse,
+                child: Container(
+                  width: 357,
+                  height: 151,
+                  padding: const EdgeInsets.all(23),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 0,
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Center(
-            child: SizedBox(
-              width: 357,
-              child: Text(
-                "Click above to load Vimukthi De-addiction\ncentres list",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 23),
-            child: GestureDetector(
-              onTap: _onSupportSection3,
-              child: Container(
-                width: 357,
-                height: 151,
-                padding: const EdgeInsets.all(23),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCFE7F3),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Support Section 3",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                  child: const Center(
+                    child: Text(
+                      "🚨Report Drug Abuse🚨",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-        ],
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 23),
+              child: Text(
+                "Resources",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 32,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 23),
+              child: GestureDetector(
+                onTap: _onSupportSection2,
+                child: Container(
+                  width: 357,
+                  height: 169,
+                  padding: const EdgeInsets.all(23),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 0,
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/vimukthi.png',
+                          height: 95,
+                          width: 400,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: SizedBox(
+                width: 357,
+                child: Text(
+                  "Click above to load Vimukthi De-addiction\ncentres list",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 23),
+              child: GestureDetector(
+                onTap: _onSupportSection3,
+                child: Container(
+                  width: 357,
+                  height: 169,
+                  padding: const EdgeInsets.all(23),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 0,
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "National Toll Free Drug De-\nAddiction Helpline Number",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/Support.svg',
+                              height: 40,
+                              width: 40,
+                            ),
+                            const SizedBox(width: 10),
+                            const Text(
+                              "1800 - 11 - 0031",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
