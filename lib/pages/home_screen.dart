@@ -35,21 +35,33 @@ class _HomePageState extends State<HomePage> {
   late double gradientCenterX;
   late double gradientCenterY;
 
-  void getUserDetails() async {
+  @override
+  void initState() {
+    super.initState();
+    currentQuote = getRandomQuote();
+    currentVideos = getRandomVideos(3);
+    gradientCenterX = _random.nextDouble() * 2 - 1;
+    gradientCenterY = _random.nextDouble() * 2 - 1;
+    getUserDetails();
+  }
+
+  Future<void> getUserDetails() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
 
-    if (userId == null) {
-      return;
-    }
+    try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
 
-    final userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-
-    if (userDoc.exists && userDoc.data() != null) {
-      setState(() {
-        username = userDoc.data()?['name'] ??
-            'User'; // Use 0 as a default if 'count' is not set
-      });
+      if (userDoc.exists && mounted) {
+        setState(() {
+          username = userDoc.data()?['name'] ?? 'User';
+        });
+      }
+    } catch (e) {
+      print('Error fetching user details: $e');
     }
   }
 
@@ -141,15 +153,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    currentQuote = getRandomQuote();
-    currentVideos = getRandomVideos(3);
-    gradientCenterX = _random.nextDouble() * 2 - 1;
-    gradientCenterY = _random.nextDouble() * 2 - 1;
-  }
-
   String getRandomQuote() {
     final random = Random();
     return quotes[random.nextInt(quotes.length)];
@@ -222,7 +225,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    getUserDetails();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -240,16 +242,16 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       children: [
                         Text(
-                          'Hello !!',
-                          style: TextStyle(
+                          'Hello, ${username}.',
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: AppColors.black,
                           ),
-                          textHeightBehavior: TextHeightBehavior(
+                          textHeightBehavior: const TextHeightBehavior(
                             applyHeightToFirstAscent: false,
                             applyHeightToLastDescent: false,
                           ),

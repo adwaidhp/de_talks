@@ -143,7 +143,7 @@ class _ProfilepageState extends State<Profilepage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hello, ${name.toUpperCase()}',
+                              '${name.toUpperCase()}',
                               style: AppTextStyles.bold.copyWith(fontSize: 20),
                             ),
                             Row(
