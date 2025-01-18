@@ -1,3 +1,6 @@
+import 'package:de_talks/models/events.dart';
+import 'package:de_talks/services/event_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/text_styles.dart';
@@ -14,11 +17,80 @@ class _CreatePageState extends State<CreatePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
+  final EventService _eventService = EventService();
+  bool _isLoading = false;
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   int _selectedYear = DateTime.now().year;
   int _selectedMonth = DateTime.now().month;
   int _selectedDay = DateTime.now().day;
+
+  Future<void> _createEvent() async {
+    // Validate all fields
+    if (_titleController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        _locationController.text.isEmpty ||
+        _selectedDate == null ||
+        _selectedTime == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      // Combine date and time
+      final DateTime eventDateTime = DateTime(
+        _selectedDate!.year,
+        _selectedDate!.month,
+        _selectedDate!.day,
+        _selectedTime!.hour,
+        _selectedTime!.minute,
+      );
+
+      // Create event model
+      final event = EventModel(
+        id: '', // Will be set by Firestore
+        title: _titleController.text.trim(),
+        description: _descriptionController.text.trim(),
+        venue: _locationController.text.trim(),
+        date: eventDateTime,
+        organizerId: FirebaseAuth.instance.currentUser!.uid,
+        attendeeIds: [
+          FirebaseAuth.instance.currentUser!.uid
+        ], // Add organizer as first attendee
+        createdAt: DateTime.now(),
+      );
+
+      // Save to Firestore
+      final eventId = await _eventService.createEvent(event);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Event created successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pop(context); // Return to previous screen
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error creating event: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -546,9 +618,7 @@ class _CreatePageState extends State<CreatePage> {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: ElevatedButton(
-                        onPressed: () {
-                          // TODO: Implement event creation
-                        },
+                        onPressed: _isLoading ? null : _createEvent,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.black,
                           padding: const EdgeInsets.symmetric(vertical: 24),
@@ -556,13 +626,22 @@ class _CreatePageState extends State<CreatePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          'Create Event',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text(
+                                'Create Event',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ),

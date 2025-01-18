@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "643768628872",
+    "project_id": "some-db-addict",
+    "storage_bucket": "some-db-addict.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643768628872:android:1b757019428946914c513d",
+        "android_client_info": {
+          "package_name": "com.example.de_talks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU3I1PcFc86Zx4TjxOuw3BSjOVyq2_Ook"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,5 @@
+import 'package:de_talks/pages/loginPage.dart';
+import 'package:de_talks/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/text_styles.dart';
@@ -18,6 +20,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final AuthService _auth = AuthService();
+
+  bool _isLoading = false;
+  String _errorMessage = '';
 
   @override
   void dispose() {
@@ -27,6 +33,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
     confirmPasswordController.dispose();
     cityController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleRegistration() async {
+    if (_formKey.currentState!.validate()) {
+      if (passwordController.text != confirmPasswordController.text) {
+        setState(() => _errorMessage = 'Passwords do not match');
+        return;
+      }
+
+      setState(() {
+        _isLoading = true;
+        _errorMessage = '';
+      });
+
+      try {
+        await _auth.registerWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          name: nameController.text.trim(),
+          city: cityController.text.trim(),
+        );
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Registration Successful!')),
+          );
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = e.toString().contains('firebase')
+              ? 'Registration failed. Please try again.'
+              : e.toString();
+        });
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
+    }
   }
 
   @override
@@ -74,50 +122,92 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        _buildRoundedInputField(
+                        _buildInputField(
                           hintText: "Enter Name",
                           controller: nameController,
-                          icon: 'assets/icons/person.svg',
+                          icon: 'assets/icons/Trash.svg',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your name';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 20),
-                        _buildRoundedInputField(
+                        _buildInputField(
                           hintText: "Enter Email",
                           controller: emailController,
                           icon: 'assets/icons/email.svg',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!value.contains('@')) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 20),
-                        _buildRoundedInputField(
+                        _buildInputField(
                           hintText: "Enter Password",
                           controller: passwordController,
+                          icon: 'assets/icons/Trash.svg',
                           obscureText: true,
-                          icon: 'assets/icons/password.svg',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 20),
-                        _buildRoundedInputField(
+                        _buildInputField(
                           hintText: "Confirm Password",
                           controller: confirmPasswordController,
+                          icon: 'assets/icons/Trash.svg',
                           obscureText: true,
-                          icon: 'assets/icons/password.svg',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please confirm your password';
+                            }
+                            if (value != passwordController.text) {
+                              return 'Passwords do not match';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 20),
-                        _buildRoundedInputField(
+                        _buildInputField(
                           hintText: "Enter City",
                           controller: cityController,
-                          icon: 'assets/icons/location.svg',
+                          icon: 'assets/icons/Trash.svg',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your city';
+                            }
+                            return null;
+                          },
                         ),
+                        if (_errorMessage.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              _errorMessage,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 30),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Registration Successful!'),
-                                  ),
-                                );
-                              }
-                            },
+                            onPressed: _isLoading ? null : _handleRegistration,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.black,
                               padding: const EdgeInsets.symmetric(vertical: 24),
@@ -125,13 +215,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            child: const Text(
-                              'REGISTER',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: _isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Text(
+                                    'REGISTER',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -146,7 +245,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
+                                );
                               },
                               child: Text(
                                 'Sign In',
@@ -170,11 +274,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildRoundedInputField({
+  Widget _buildInputField({
     required String hintText,
     required TextEditingController controller,
     required String icon,
     bool obscureText = false,
+    required String? Function(String?) validator,
   }) {
     return Center(
       child: SizedBox(
@@ -190,9 +295,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           ),
-          child: TextField(
+          child: TextFormField(
             controller: controller,
             obscureText: obscureText,
+            validator: validator,
             decoration: InputDecoration(
               labelText: hintText,
               labelStyle: TextStyle(color: AppColors.black),
@@ -211,6 +317,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
+              ),
+              errorStyle: const TextStyle(
+                color: Colors.red,
+                fontSize: 12,
               ),
             ),
           ),

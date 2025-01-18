@@ -1,5 +1,8 @@
 import 'package:de_talks/colors.dart';
+import 'package:de_talks/models/events.dart';
+import 'package:de_talks/services/event_service.dart';
 import 'package:de_talks/text_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -210,63 +213,85 @@ class Profilepage extends StatelessWidget {
                     style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 10),
-                  ListView.builder(
-                    shrinkWrap:
-                        true, // Important when using ListView inside Column
-                    physics:
-                        NeverScrollableScrollPhysics(), // Use this if you want the parent SingleChildScrollView to handle scrolling
-                    itemCount: events.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                offset: Offset(0, 4),
-                                blurRadius: 4,
-                                color: Color.fromRGBO(0, 0, 0, 0.25),
-                              ),
-                            ],
-                            color: AppColors.grey,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                events[index].title,
-                                style:
-                                    AppTextStyles.bold.copyWith(fontSize: 16),
-                              ),
-                              Container(
-                                width: 80,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: events[index].status == 'Organised'
-                                      ? AppColors.lightBlueAccent
-                                      : AppColors.darkerGrey,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  events[index].status,
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyles.bold.copyWith(
-                                    fontSize: 12,
+                  StreamBuilder<List<EventModel>>(
+                    stream: EventService()
+                        .getUserEvents(FirebaseAuth.instance.currentUser!.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return SelectableText('Error: ${snapshot.error}');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+
+                      final events = snapshot.data ?? [];
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          final event = events[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                boxShadow: const [
+                                  BoxShadow(
+                                    offset: Offset(0, 4),
+                                    blurRadius: 4,
+                                    color: Color.fromRGBO(0, 0, 0, 0.25),
                                   ),
-                                ),
+                                ],
+                                color: AppColors.grey,
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            ],
-                          ),
-                        ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    event.title,
+                                    style: AppTextStyles.bold
+                                        .copyWith(fontSize: 16),
+                                  ),
+                                  Container(
+                                    width: 80,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: event.organizerId ==
+                                              FirebaseAuth
+                                                  .instance.currentUser!.uid
+                                          ? AppColors.lightBlueAccent
+                                          : AppColors.darkerGrey,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      event.organizerId ==
+                                              FirebaseAuth
+                                                  .instance.currentUser!.uid
+                                          ? 'Organised'
+                                          : 'Attended',
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.bold.copyWith(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
-                  ),
+                  )
                 ],
               ),
             ),
