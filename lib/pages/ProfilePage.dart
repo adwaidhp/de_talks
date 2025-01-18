@@ -216,9 +216,11 @@ class _ProfilepageState extends State<Profilepage> {
                         onTap: () {
                           setState(() async {
                             count++;
-                            SnackBar(
-                                content: Text(
-                                    '${7 - (count % 7)} days to acheive next badge!! '));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      '${7 - (count % 7)} days to acheive next badge!! ')),
+                            );
                             final userId =
                                 FirebaseAuth.instance.currentUser?.uid;
                             await FirebaseFirestore.instance
