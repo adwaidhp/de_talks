@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Text(
-                          "Alex",
+                          "Alex.",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -222,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Motivational Videos',
+                            'Somethings to inspire you.',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
