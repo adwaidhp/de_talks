@@ -125,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildInputField(
                           hintText: "Enter Name",
                           controller: nameController,
-                          icon: 'assets/icons/Trash.svg',
+                          icon: 'assets/icons/Profile.svg',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your name';
@@ -137,7 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildInputField(
                           hintText: "Enter Email",
                           controller: emailController,
-                          icon: 'assets/icons/email.svg',
+                          icon: 'assets/icons/Email.svg',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildInputField(
                           hintText: "Enter Password",
                           controller: passwordController,
-                          icon: 'assets/icons/Trash.svg',
+                          icon: 'assets/icons/Key.svg',
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -168,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildInputField(
                           hintText: "Confirm Password",
                           controller: confirmPasswordController,
-                          icon: 'assets/icons/Trash.svg',
+                          icon: 'assets/icons/keyhole.svg',
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -184,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildInputField(
                           hintText: "Enter City",
                           controller: cityController,
-                          icon: 'assets/icons/Trash.svg',
+                          icon: 'assets/icons/city.svg',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your city';

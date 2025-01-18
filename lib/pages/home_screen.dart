@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:de_talks/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' show Random, pi;
@@ -53,6 +55,7 @@ class _HomePageState extends State<HomePage> {
         } else {
           print('Could not launch $url');
         }
+        await Future.delayed(const Duration(seconds: 3));
         replaceVideo(index);
       },
       child: Column(
