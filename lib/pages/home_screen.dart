@@ -47,24 +47,63 @@ class _HomePageState extends State<HomePage> {
         print('Opening link: ${video.link}');
         replaceVideo(index);
       },
-      child: Container(
-        height: 200,
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          image: DecorationImage(
-            image: AssetImage(video.thumbnail),
-            fit: BoxFit.cover,
-          ),
-          boxShadow: const [
-            BoxShadow(
-              offset: Offset(0, 4),
-              blurRadius: 4,
-              color: Color.fromRGBO(0, 0, 0, 0.25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width:
+                MediaQuery.of(context).size.width > 600 ? 600 : double.infinity,
+            height: (MediaQuery.of(context).size.width > 600
+                    ? 600
+                    : MediaQuery.of(context).size.width) *
+                9 /
+                16,
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                image: AssetImage(video.thumbnail),
+                fit: BoxFit.cover,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
+                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                ),
+              ],
             ),
-          ],
-        ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: const [0.0, 1],
+                  colors: [
+                    Colors.black.withOpacity(.8),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    video.title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+        ],
       ),
     );
   }
@@ -90,28 +129,42 @@ class _HomePageState extends State<HomePage> {
   static const List<VideoItem> allVideos = [
     VideoItem(
       thumbnail: 'assets/images/video1.png',
-      link: '<linkhere>',
-      title: 'Video 1',
+      link: 'https://youtu.be/hBC7i-vHWsU?si=MuQUjX2AZmXl6-wi',
+      title: 'What causes addiction, and why is it so hard to treat?',
     ),
     VideoItem(
       thumbnail: 'assets/images/video2.png',
-      link: '<linkhere>',
-      title: 'Video 2',
+      link:
+          'https://www.youtube.com/watch?v=qJ-qX3yrxC0&ab_channel=NOVAPBSOfficial',
+      title: 'Addiction I Full Documentary I NOVA I PBS',
     ),
     VideoItem(
       thumbnail: 'assets/images/video3.png',
-      link: '<linkhere>',
-      title: 'Video 3',
+      link:
+          'https://www.youtube.com/watch?v=HDfSx_Q7_Yk&ab_channel=HowAddictionHappens',
+      title: 'How Addiction Happens',
     ),
     VideoItem(
       thumbnail: 'assets/images/video4.png',
-      link: '<linkhere>',
-      title: 'Video 4',
+      link:
+          'https://www.youtube.com/watch?v=J-1neoDfLzo&t=147s&ab_channel=AddictionMindset',
+      title: 'Best Method To Manage Weed Withdrawal Symptoms',
     ),
     VideoItem(
       thumbnail: 'assets/images/video5.png',
-      link: '<linkhere>',
-      title: 'Video 5',
+      link:
+          'https://www.youtube.com/watch?v=_rBPwu2uS-w&ab_channel=Kurzgesagt%E2%80%93InaNutshell',
+      title: 'Smoking kills',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video6.png',
+      link: 'https://youtu.be/FuooVrSpffk?si=Hry_pC4SsgDsSX2c',
+      title: 'The Stigma of Addiction | Tony Hoffman | TEDxFresnoState',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video7.png',
+      link: 'https://youtu.be/Wh9O3-ciOYs?si=D4cps3c-9a-2mwyr',
+      title: 'Finding sobriety on a mountaintop | Scott Strode | TEDxMileHigh',
     ),
   ];
 
@@ -176,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Text(
-                          "Alex",
+                          "Alex.",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -216,30 +269,41 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 50),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(0.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Motivational Videos',
+                            'Here are some things to inspire you.',
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
                               color: AppColors.black,
+                            ),
+                            textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false,
+                              applyHeightToLastDescent: false,
                             ),
                           ),
                           const SizedBox(height: 20),
-                          ...currentVideos.asMap().entries.map(
-                                (entry) =>
-                                    buildVideoContainer(entry.value, entry.key),
-                              ),
+                          Center(
+                            child: Column(
+                              children: [
+                                ...currentVideos.asMap().entries.map(
+                                      (entry) => buildVideoContainer(
+                                          entry.value, entry.key),
+                                    ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 50),
             ],
           ),
         ),
