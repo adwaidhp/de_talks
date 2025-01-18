@@ -1,5 +1,6 @@
 import 'package:de_talks/models/events.dart';
 import 'package:de_talks/pages/create_events.dart';
+import 'package:de_talks/pages/edit_events.dart';
 import 'package:de_talks/services/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
@@ -282,70 +283,71 @@ class _EventsPageState extends State<EventsPage> {
                       ),
                     ),
                   ),
-                  ...events
-                      .map((event) => EventCard(
-                            event: event,
-                            isRegistered:
-                                event.attendeeIds.contains(currentUserId),
-                            onDelete: () async {
-                              if (event.organizerId == currentUserId) {
-                                try {
-                                  await _eventService.deleteEvent(event.id);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Event deleted successfully')),
-                                  );
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Error deleting event: $e')),
-                                  );
-                                }
-                              }
-                            },
-                            onEdit: () {
-                              if (event.organizerId == currentUserId) {
-                                // Navigate to edit event page
-                              }
-                            },
-                            onRegister: () async {
-                              try {
-                                await _eventService.registerForEvent(
-                                    event.id, currentUserId);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'Registered for event successfully')),
-                                );
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          'Error registering for event: $e')),
-                                );
-                              }
-                            },
-                            onUnregister: () async {
-                              try {
-                                await _eventService.unregisterFromEvent(
-                                    event.id, currentUserId);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'Unregistered from event successfully')),
-                                );
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          'Error unregistering from event: $e')),
-                                );
-                              }
-                            },
-                          ))
-                      ,
+                  ...events.map((event) => EventCard(
+                        event: event,
+                        isRegistered: event.attendeeIds.contains(currentUserId),
+                        onDelete: () async {
+                          if (event.organizerId == currentUserId) {
+                            try {
+                              await _eventService.deleteEvent(event.id);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Event deleted successfully')),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Error deleting event: $e')),
+                              );
+                            }
+                          }
+                        },
+                        onEdit: () {
+                          if (event.organizerId == currentUserId) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditEventPage(event: event)),
+                            );
+                          }
+                        },
+                        onRegister: () async {
+                          try {
+                            await _eventService.registerForEvent(
+                                event.id, currentUserId);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Registered for event successfully')),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Error registering for event: $e')),
+                            );
+                          }
+                        },
+                        onUnregister: () async {
+                          try {
+                            await _eventService.unregisterFromEvent(
+                                event.id, currentUserId);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Unregistered from event successfully')),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Error unregistering from event: $e')),
+                            );
+                          }
+                        },
+                      )),
                   const SizedBox(height: 100),
                 ],
               ),

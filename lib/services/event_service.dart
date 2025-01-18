@@ -70,9 +70,10 @@ class EventService {
   Future<void> updateEvent(EventModel event) async {
     await _firestore.collection('events').doc(event.id).update(event.toMap());
   }
+
   Stream<List<EventModel>> getPastEvents(String userId) {
     final now = DateTime.now();
-    
+
     return _firestore
         .collection('events')
         .where('date', isLessThan: Timestamp.fromDate(now))
@@ -87,5 +88,4 @@ class EventService {
   }
 
   // Get upcoming events for a specific user
-  
 }
