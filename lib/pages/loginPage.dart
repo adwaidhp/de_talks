@@ -1,7 +1,12 @@
+// Fixed import
+import 'package:de_talks/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
 import 'package:de_talks/text_styles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'register_screen.dart';
+import 'navigation.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Added import
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,12 +19,64 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final AuthService _auth = AuthService();
+
+  bool _isLoading = false;
+  String _errorMessage = '';
+  bool _obscurePassword = true; // Added for password visibility toggle
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = '';
+      });
+
+      try {
+        await _auth.signInWithEmailAndPassword(
+          emailController.text.trim(),
+          passwordController.text.trim(),
+        );
+
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Navigation()),
+            (Route<dynamic> route) => false,
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          switch (e.code) {
+            case 'user-not-found':
+              _errorMessage = 'No user found with this email.';
+              break;
+            case 'wrong-password':
+              _errorMessage = 'Wrong password provided.';
+              break;
+            case 'invalid-email':
+              _errorMessage = 'Invalid email address.';
+              break;
+            default:
+              _errorMessage = 'Login failed. Please try again.';
+          }
+        });
+      } catch (e) {
+        setState(() {
+          _errorMessage = 'An error occurred. Please try again.';
+        });
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
+    }
   }
 
   @override
@@ -34,8 +91,8 @@ class _LoginPageState extends State<LoginPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          child: SafeArea(
+        child: SafeArea(
+          child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -52,9 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 40),
+                      horizontal: 20,
+                      vertical: 40,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppColors.white.withOpacity(0.7),
+                      color: Colors.white.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -75,27 +134,49 @@ class _LoginPageState extends State<LoginPage> {
                             width: 200,
                           ),
                           const SizedBox(height: 30),
-                          _buildRoundedInputField(
+                          _buildInputField(
                             hintText: "Enter Email",
                             controller: emailController,
                             icon: 'assets/icons/email.svg',
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 20),
-                          _buildRoundedInputField(
+                          _buildInputField(
                             hintText: "Enter Password",
                             controller: passwordController,
                             icon: 'assets/icons/Key.svg',
-                            obscureText: true,
+                            obscureText: _obscurePassword,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: AppColors.black.withOpacity(0.6),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
                           ),
+                          if (_errorMessage.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                _errorMessage,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           const SizedBox(height: 30),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.8,
                             child: ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  // Handle login
-                                }
-                              },
+                              onPressed: _isLoading ? null : _handleLogin,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.black,
                                 padding:
@@ -104,14 +185,53 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: const Text(
-                                'LOGIN',
+                              child: _isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'LOGIN',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Don\'t have an account?',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
+                                  color: AppColors.black.withOpacity(0.6),
                                 ),
                               ),
-                            ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Register',
+                                  style: TextStyle(
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -126,48 +246,72 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildRoundedInputField({
+  Widget _buildInputField({
     required String hintText,
     required TextEditingController controller,
     required String icon,
     bool obscureText = false,
+    Widget? suffixIcon,
+    TextInputType? keyboardType,
   }) {
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                offset: Offset(0, 4),
-                blurRadius: 4,
-                color: AppColors.blackOverlay,
-              ),
-            ],
-          ),
-          child: TextField(
-            controller: controller,
-            obscureText: obscureText,
-            decoration: InputDecoration(
-              labelText: hintText,
-              labelStyle: TextStyle(color: AppColors.black),
-              filled: true,
-              fillColor: AppColors.grey,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset(
-                  icon,
-                  colorFilter: ColorFilter.mode(
-                    AppColors.black.withOpacity(0.6),
-                    BlendMode.srcIn,
-                  ),
+        child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'This field is required';
+            }
+            if (controller == emailController && !value.contains('@')) {
+              return 'Please enter a valid email';
+            }
+            if (controller == passwordController && value.length < 6) {
+              return 'Password must be at least 6 characters';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            labelText: hintText,
+            labelStyle: TextStyle(color: AppColors.black),
+            filled: true,
+            fillColor: AppColors.grey,
+            prefixIcon: Padding(
+              padding: const EdgeInsets.all(12),
+              child: SvgPicture.asset(
+                icon,
+                colorFilter: ColorFilter.mode(
+                  AppColors.black.withOpacity(0.6),
+                  BlendMode.srcIn,
                 ),
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
+            ),
+            suffixIcon: suffixIcon,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.black, width: 1),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            errorStyle: const TextStyle(
+              color: Colors.red,
+              fontSize: 12,
             ),
           ),
         ),
