@@ -168,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildInputField(
                           hintText: "Confirm Password",
                           controller: confirmPasswordController,
-                          icon: 'assets/icons/keyhole.svg',
+                          icon: 'assets/icons/Key.svg',
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -281,6 +281,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool obscureText = false,
     required String? Function(String?) validator,
   }) {
+    // Define padding and size based on icon type
+    final double iconPadding =
+        (icon == 'assets/icons/Key.svg' || icon == 'assets/icons/city.svg')
+            ? 14
+            : 12;
+    final double iconSize =
+        (icon == 'assets/icons/Key.svg' || icon == 'assets/icons/city.svg')
+            ? 20
+            : 24;
+
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
@@ -305,13 +315,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               filled: true,
               fillColor: AppColors.grey,
               prefixIcon: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(iconPadding),
                 child: SvgPicture.asset(
                   icon,
                   colorFilter: ColorFilter.mode(
                     AppColors.black.withOpacity(0.6),
                     BlendMode.srcIn,
                   ),
+                  width: iconSize,
+                  height: iconSize,
                 ),
               ),
               border: OutlineInputBorder(

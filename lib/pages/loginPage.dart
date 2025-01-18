@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                           _buildInputField(
                             hintText: "Enter Email",
                             controller: emailController,
-                            icon: 'assets/icons/email.svg',
+                            icon: 'assets/icons/Email.svg',
                             keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 20),
@@ -254,6 +254,9 @@ class _LoginPageState extends State<LoginPage> {
     Widget? suffixIcon,
     TextInputType? keyboardType,
   }) {
+    // Define size based on icon type
+    final double iconSize = icon == 'assets/icons/Key.svg' ? 20 : 24;
+
     return Center(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
@@ -286,6 +289,8 @@ class _LoginPageState extends State<LoginPage> {
                   AppColors.black.withOpacity(0.6),
                   BlendMode.srcIn,
                 ),
+                width: iconSize,
+                height: iconSize,
               ),
             ),
             suffixIcon: suffixIcon,

@@ -79,10 +79,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 curve: Curves.easeInOut,
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 transform: Matrix4.identity()
-                  ..translate(200.0, 100.0)
+                  ..translate(190.0, 100.0)
                   ..rotateZ(_isLoaded ? 0 : -(45 * 3.14159) / 180)
                   ..scale(_isLoaded ? 1.0 : 0.6)
-                  ..translate(-205.0, -100.0),
+                  ..translate(-190.0, -100.0),
                 child: Image.asset(
                   'assets/images/logo.png',
                   width: 400,
