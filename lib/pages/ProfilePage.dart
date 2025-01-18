@@ -15,11 +15,91 @@ class Profilepage extends StatefulWidget {
   State<Profilepage> createState() => _ProfilepageState();
 }
 
-class _ProfilepageState extends State<Profilepage> {
+class _ProfilepageState extends State<Profilepage>
+    with SingleTickerProviderStateMixin {
   int count = 0;
-
   String name = '';
   String city = '';
+  bool _isChecked = false;
+  late AnimationController _checkController;
+  late Animation<double> _checkAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _checkAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _checkController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _checkController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _updateStreak() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    try {
+      // Start the check animation
+      await _checkController.forward();
+
+      // Calculate days until next badge
+      int daysUntilNextBadge = 7 - ((count + 1) % 7);
+      String badgeMessage = daysUntilNextBadge == 0
+          ? 'Congratulations! You earned a new badge! 🎉'
+          : 'Keep going! ${daysUntilNextBadge} day${daysUntilNextBadge == 1 ? '' : 's'} until your next badge! 🏆';
+
+      // Update the streak in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'dayCount': count + 1,
+      });
+
+      // Show the badge progress message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              badgeMessage,
+              style: const TextStyle(fontSize: 16),
+            ),
+            backgroundColor:
+                daysUntilNextBadge == 0 ? Colors.green : AppColors.black,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+
+      // Wait for a moment to show the strikethrough
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Reset the checkbox and get new pledge
+      if (mounted) {
+        setState(() {
+          _isChecked = false;
+          count += 1;
+        });
+      }
+      _checkController.reset();
+    } catch (e) {
+      print('Error updating streak: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error updating streak: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   void getUserDetails() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -143,7 +223,7 @@ class _ProfilepageState extends State<Profilepage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${name.toUpperCase()}',
+                              '${name}',
                               style: AppTextStyles.bold.copyWith(fontSize: 20),
                             ),
                             Row(
@@ -205,41 +285,9 @@ class _ProfilepageState extends State<Profilepage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Today's Pledge.",
-                        style: AppTextStyles.bold.copyWith(fontSize: 20),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() async {
-                            count++;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(
-                                      '${7 - (count % 7)} days to acheive next badge!! ')),
-                            );
-                            final userId =
-                                FirebaseAuth.instance.currentUser?.uid;
-                            await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(userId)
-                                .update({'dayCount': count});
-                          });
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: AppColors.darkerGrey),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Text("Completed", style: AppTextStyles.bold),
-                            )),
-                      ),
-                    ],
+                  Text(
+                    "Today's Pledge.",
+                    style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 12),
                   Container(
@@ -256,12 +304,50 @@ class _ProfilepageState extends State<Profilepage> {
                         ),
                       ],
                     ),
-                    child: Text(
-                      pledges[count],
-                      style: AppTextStyles.bold.copyWith(
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 300),
+                            style: AppTextStyles.bold.copyWith(
+                              fontSize: 16,
+                              color: Colors.black87,
+                              decoration: _isChecked
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                            ),
+                            child: Text(pledges[count]),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: _isChecked ? null : _updateStreak,
+                          child: AnimatedBuilder(
+                            animation: _checkAnimation,
+                            builder: (context, child) {
+                              return Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: AppColors.black,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: _isChecked || _checkAnimation.value > 0
+                                    ? CustomPaint(
+                                        painter: CheckmarkPainter(
+                                          progress: _checkAnimation.value,
+                                          color: AppColors.black,
+                                        ),
+                                      )
+                                    : null,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -399,4 +485,38 @@ class EventItem {
   final String status;
 
   EventItem({required this.title, required this.status});
+}
+
+class CheckmarkPainter extends CustomPainter {
+  final double progress;
+  final Color color;
+
+  CheckmarkPainter({required this.progress, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+    path.moveTo(size.width * 0.2, size.height * 0.5);
+    path.lineTo(size.width * 0.45, size.height * 0.7);
+    path.lineTo(size.width * 0.8, size.height * 0.3);
+
+    final pathMetric = path.computeMetrics().first;
+    final pathSegment = pathMetric.extractPath(
+      0.0,
+      pathMetric.length * progress,
+    );
+
+    canvas.drawPath(pathSegment, paint);
+  }
+
+  @override
+  bool shouldRepaint(CheckmarkPainter oldDelegate) {
+    return oldDelegate.progress != progress;
+  }
 }
