@@ -130,7 +130,7 @@ class Profilepage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Bio',
+                        'Bio.',
                         style: AppTextStyles.bold.copyWith(fontSize: 20),
                       ),
                       GestureDetector(
@@ -164,7 +164,7 @@ class Profilepage extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    'Badges',
+                    'Badges.',
                     style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 10),
@@ -199,7 +199,7 @@ class Profilepage extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    'Past Events',
+                    'Past Events.',
                     style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 10),
@@ -209,6 +209,13 @@ class Profilepage extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(0, 4),
+                              blurRadius: 4,
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                          ],
                           color: AppColors.grey,
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -245,6 +252,13 @@ class Profilepage extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(0, 4),
+                              blurRadius: 4,
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                          ],
                           color: AppColors.grey,
                           borderRadius: BorderRadius.circular(12),
                         ),

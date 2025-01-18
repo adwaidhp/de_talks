@@ -294,7 +294,7 @@ class EventsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
                 child: Text(
-                  'My Events',
+                  'My Events.',
                   style: AppTextStyles.heading1.copyWith(
                     fontWeight: FontWeight.w500,
                   ),

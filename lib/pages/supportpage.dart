@@ -110,6 +110,10 @@ class _SupportPageState extends State<SupportPage> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.black,
+                          width: 2,
+                        ),
                         color: AppColors.grey,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: const [
@@ -133,7 +137,7 @@ class _SupportPageState extends State<SupportPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 50),
                 const Text(
                   "Resources.",
                   style: TextStyle(
@@ -152,6 +156,10 @@ class _SupportPageState extends State<SupportPage> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.black,
+                          width: 2,
+                        ),
                         color: AppColors.grey,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: const [
@@ -182,6 +190,10 @@ class _SupportPageState extends State<SupportPage> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.black,
+                          width: 2,
+                        ),
                         color: AppColors.grey,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: const [
