@@ -84,8 +84,7 @@ class Profilepage extends StatelessWidget {
                                 const SizedBox(width: 10),
                                 SvgPicture.asset(
                                   'assets/icons/twitter.svg',
-                                  width: 10,
-                                  height: 10,
+                                  width: 20,
                                 ),
                                 const SizedBox(width: 10),
                               ],
