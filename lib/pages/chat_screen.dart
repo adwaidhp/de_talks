@@ -15,6 +15,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final GroqService _groqService = GroqService();
   final List<ChatMessage> _messages = [];
   bool _isTyping = false;
+  ChatMessage? _currentAnimatingMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +92,25 @@ class _ChatScreenState extends State<ChatScreen> {
 
     try {
       final response = await _groqService.getChatResponse(message);
+      final chatMessage = ChatMessage(text: '', isUser: false);
       setState(() {
-        _messages.add(ChatMessage(text: response, isUser: false));
+        _messages.add(chatMessage);
+        _currentAnimatingMessage = chatMessage;
+      });
+
+      String displayText = '';
+      for (int i = 0; i < response.length; i++) {
+        if (_currentAnimatingMessage != chatMessage) break;
+        await Future.delayed(Duration(milliseconds: 1));
+        displayText += response[i];
+        setState(() {
+          chatMessage.text = displayText;
+        });
+      }
+
+      setState(() {
         _isTyping = false;
+        _currentAnimatingMessage = null;
       });
       _scrollToBottom();
     } catch (e) {
