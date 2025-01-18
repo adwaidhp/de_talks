@@ -130,7 +130,7 @@ class _SupportPageState extends State<SupportPage> {
                         child: Text(
                           "🚨 Report Drug Abuse 🚨",
                           style: AppTextStyles.bold.copyWith(
-                            fontSize: 19,
+                            fontSize: 22,
                           ),
                         ),
                       ),
@@ -283,7 +283,7 @@ class _SupportPageState extends State<SupportPage> {
                             Text(
                               "I have an Urge",
                               style: AppTextStyles.bold.copyWith(
-                                fontSize: 20,
+                                fontSize: 24,
                               ),
                             ),
                           ],
