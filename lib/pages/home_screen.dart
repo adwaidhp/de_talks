@@ -128,12 +128,6 @@ class _HomePageState extends State<HomePage> {
     return quotes[random.nextInt(quotes.length)];
   }
 
-  void refreshQuote() {
-    setState(() {
-      currentQuote = getRandomQuote();
-    });
-  }
-
   static const List<VideoItem> allVideos = [
     VideoItem(
       thumbnail: 'assets/images/video2.png',
@@ -243,7 +237,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 20),
                     GestureDetector(
-                      onTap: refreshQuote,
                       child: Container(
                         height: 200,
                         alignment: Alignment.center,
@@ -256,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                             radius: 1.0,
                             colors: [
                               AppColors.white.withOpacity(0.7),
-                              AppColors.darkBlueContrast.withOpacity(0.9),
+                              AppColors.darkBlueContrast.withOpacity(0.6),
                             ],
                             stops: [0.0, 0.7],
                           ),
@@ -274,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                           textAlign: TextAlign.center,
                           style: AppTextStyles.bold.copyWith(
                             fontStyle: FontStyle.italic,
-                            fontSize: 20,
+                            fontSize: 22,
                           ),
                         ),
                       ),
