@@ -16,6 +16,21 @@ class EventService {
     }
   }
 
+  Future<EventModel?> getEvent(String eventId) async {
+    try {
+      final doc = await _firestore.collection('events').doc(eventId).get();
+      if (doc.exists) {
+        return EventModel.fromMap(
+            doc.data()!, doc.id); // Convert document data to EventModel
+      } else {
+        return null; // Return null if the document doesn't exist
+      }
+    } catch (e) {
+      print('Error fetching event: $e'); // Handle errors
+      return null;
+    }
+  }
+
   // Get all upcoming events
   Stream<List<EventModel>> getUpcomingEvents() {
     return _firestore

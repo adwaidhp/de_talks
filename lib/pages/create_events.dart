@@ -21,9 +21,150 @@ class _CreatePageState extends State<CreatePage> {
   bool _isLoading = false;
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
-  int _selectedYear = DateTime.now().year;
-  int _selectedMonth = DateTime.now().month;
-  int _selectedDay = DateTime.now().day;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = DateTime.now();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.black,
+              surface: AppColors.grey,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.black,
+              surface: AppColors.grey,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
+
+  Widget _buildDatePicker() {
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: GestureDetector(
+          onTap: () => _selectDate(context),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.grey,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
+                  color: AppColors.blackOverlay,
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: SvgPicture.asset(
+                    'assets/icons/calendar.svg',
+                    colorFilter: ColorFilter.mode(
+                      AppColors.black.withOpacity(0.6),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                Text(
+                  _selectedDate == null
+                      ? 'Select Date'
+                      : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                  style: TextStyle(color: AppColors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimePicker() {
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: GestureDetector(
+          onTap: () => _selectTime(context),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.grey,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
+                  color: AppColors.blackOverlay,
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: SvgPicture.asset(
+                    'assets/icons/clock.svg',
+                    colorFilter: ColorFilter.mode(
+                      AppColors.black.withOpacity(0.6),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                Text(
+                  _selectedTime == null
+                      ? 'Select Time'
+                      : _selectedTime!.format(context),
+                  style: TextStyle(color: AppColors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<void> _createEvent() async {
     // Validate all fields
@@ -93,272 +234,11 @@ class _CreatePageState extends State<CreatePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    final now = DateTime.now();
-    _selectedYear = now.year;
-    _selectedMonth = now.month;
-    _selectedDay = now.day;
-    _selectedDate = now;
-  }
-
-  @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
     _locationController.dispose();
     super.dispose();
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2025),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.black,
-              onPrimary: Colors.white,
-              surface: AppColors.grey,
-              onSurface: AppColors.black,
-              secondary: AppColors.black,
-              onSecondary: Colors.white,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.black,
-              ),
-            ),
-            dialogBackgroundColor: Colors.white,
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime ?? TimeOfDay.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.black,
-              surface: AppColors.grey,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != _selectedTime) {
-      setState(() {
-        _selectedTime = picked;
-      });
-    }
-  }
-
-  void _showCustomDatePicker(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            height: 300,
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  offset: Offset(0, 4),
-                  blurRadius: 4,
-                  color: AppColors.blackOverlay,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Select Date',
-                    style: AppTextStyles.bold.copyWith(
-                      fontSize: 20,
-                      color: AppColors.black,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      // Month Selector
-                      Expanded(
-                        child: ListWheelScrollView.useDelegate(
-                          itemExtent: 50,
-                          diameterRatio: 1.5,
-                          squeeze: 0.8,
-                          physics: const FixedExtentScrollPhysics(),
-                          childDelegate: ListWheelChildBuilderDelegate(
-                            childCount: 12,
-                            builder: (context, index) {
-                              return Center(
-                                child: Text(
-                                  _getMonthName(index + 1),
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() {
-                              _selectedMonth = index + 1;
-                              int maxDays =
-                                  DateTime(_selectedYear, _selectedMonth + 1, 0)
-                                      .day;
-                              if (_selectedDay > maxDays) {
-                                _selectedDay = maxDays;
-                              }
-                              _selectedDate = DateTime(
-                                  _selectedYear, _selectedMonth, _selectedDay);
-                            });
-                          },
-                        ),
-                      ),
-                      // Day Selector
-                      Expanded(
-                        child: ListWheelScrollView.useDelegate(
-                          itemExtent: 50,
-                          diameterRatio: 1.5,
-                          squeeze: 0.8,
-                          physics: const FixedExtentScrollPhysics(),
-                          childDelegate: ListWheelChildBuilderDelegate(
-                            childCount: 31,
-                            builder: (context, index) {
-                              return Center(
-                                child: Text(
-                                  '${index + 1}',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() {
-                              _selectedDay = index + 1;
-                              _selectedDate = DateTime(
-                                  _selectedYear, _selectedMonth, _selectedDay);
-                            });
-                          },
-                        ),
-                      ),
-                      // Year Selector
-                      Expanded(
-                        child: ListWheelScrollView.useDelegate(
-                          itemExtent: 50,
-                          diameterRatio: 1.5,
-                          squeeze: 0.8,
-                          physics: const FixedExtentScrollPhysics(),
-                          childDelegate: ListWheelChildBuilderDelegate(
-                            childCount: 10,
-                            builder: (context, index) {
-                              int year = DateTime.now().year + index;
-                              return Center(
-                                child: Text(
-                                  '$year',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          onSelectedItemChanged: (index) {
-                            setState(() {
-                              _selectedYear = DateTime.now().year + index;
-                              _selectedDate = DateTime(
-                                  _selectedYear, _selectedMonth, _selectedDay);
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(
-                            color: AppColors.black.withOpacity(0.6),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          'OK',
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  String _getMonthName(int month) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return months[month - 1];
   }
 
   @override
@@ -520,109 +400,9 @@ class _CreatePageState extends State<CreatePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                              color: AppColors.blackOverlay,
-                            ),
-                          ],
-                        ),
-                        child: GestureDetector(
-                          onTap: () => _showCustomDatePicker(context),
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: AppColors.grey,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/calendar.svg',
-                                    colorFilter: ColorFilter.mode(
-                                      AppColors.black.withOpacity(0.6),
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 24,
-                                    width: 24,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    _selectedDate == null
-                                        ? 'Select Date'
-                                        : '${_selectedDay.toString().padLeft(2, '0')}/${_getMonthName(_selectedMonth)}/${_selectedYear}',
-                                    style: TextStyle(color: AppColors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildDatePicker(),
                   const SizedBox(height: 20),
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                              color: AppColors.blackOverlay,
-                            ),
-                          ],
-                        ),
-                        child: GestureDetector(
-                          onTap: () => _selectTime(context),
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: AppColors.grey,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/clock.svg',
-                                    colorFilter: ColorFilter.mode(
-                                      AppColors.black.withOpacity(0.6),
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 24,
-                                    width: 24,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    _selectedTime == null
-                                        ? 'Select Time'
-                                        : _selectedTime!.format(context),
-                                    style: TextStyle(color: AppColors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildTimePicker(),
                   const SizedBox(height: 30),
                   Center(
                     child: SizedBox(
