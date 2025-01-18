@@ -32,6 +32,9 @@ class _HomePageState extends State<HomePage> {
   String username = '';
   late List<VideoItem> currentVideos;
   final Random _random = Random();
+  late double gradientCenterX;
+  late double gradientCenterY;
+
   void getUserDetails() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -143,6 +146,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     currentQuote = getRandomQuote();
     currentVideos = getRandomVideos(3);
+    gradientCenterX = _random.nextDouble() * 2 - 1;
+    gradientCenterY = _random.nextDouble() * 2 - 1;
   }
 
   String getRandomQuote() {
@@ -260,8 +265,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           gradient: RadialGradient(
-                            center: Alignment(_random.nextDouble() * 2 - 1,
-                                _random.nextDouble() * 2 - 1),
+                            center: Alignment(gradientCenterX, gradientCenterY),
                             radius: 1.0,
                             colors: [
                               AppColors.white.withOpacity(0.7),
