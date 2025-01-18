@@ -26,7 +26,6 @@ class _ChatScreenState extends State<ChatScreen> {
             Navigator.of(context).pop();
           },
         ),
-        //backgroundColor: ChatTheme.primaryColor,
         elevation: 3,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
