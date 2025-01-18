@@ -53,7 +53,7 @@ class WelcomePage extends StatelessWidget {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20)),
                     border: Border.all(
-                      color: AppColors.lightBlueAccent,
+                      color: AppColors.black,
                       width: 2,
                     ),
                   ),
