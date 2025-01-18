@@ -1,18 +1,23 @@
 import 'package:de_talks/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SupportPage extends StatelessWidget {
   const SupportPage({super.key});
 
-  void _onReportDrugAbuse() {
-    // Template function for drug abuse reporting
-    print('Report Drug Abuse clicked');
+  void _onReportDrugAbuse() async {
+    final Uri url = Uri.parse('https://www.ncbmanas.gov.in/createTicket');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
-  void _onSupportSection2() {
-    // Template function for support section 2
-    print('Support Section 2 clicked');
+  void _onSupportSection2() async {
+    final Uri url = Uri.parse('https://vimukthi.kerala.gov.in/');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   void _onSupportSection3() {
@@ -122,19 +127,7 @@ class SupportPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Center(
-                  child: Text(
-                    "Click above to load Vimukthi De-addiction\ncentres list",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 32),
                 // Helpline Container
                 Center(
                   child: GestureDetector(
