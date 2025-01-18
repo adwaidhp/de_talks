@@ -1,4 +1,6 @@
+import 'package:de_talks/colors.dart';
 import 'package:de_talks/pages/home_screen.dart';
+import 'package:de_talks/pages/supportpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +19,7 @@ class _NavigationState extends State<Navigation> {
 
   final List<Widget> _pages = [
     HomePage(),
-    Scaffold(body: Center(child: Text('Support'))),
+    SupportPage(),
     Scaffold(body: Center(child: Text('Profile'))),
     Scaffold(body: Center(child: Text('Updates'))),
   ];
@@ -36,7 +38,7 @@ class _NavigationState extends State<Navigation> {
       colorFilter: ColorFilter.mode(
         isSelected
             ? activeBlue // Active icon color - Blue
-            : Colors.grey[400]!, // Inactive icon color
+            : Colors.black, // Inactive icon color
         BlendMode.srcIn,
       ),
     );
@@ -48,12 +50,13 @@ class _NavigationState extends State<Navigation> {
       extendBody: true,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-        margin: EdgeInsets.symmetric(horizontal: 14, vertical: 18),
+        margin: EdgeInsets.symmetric(horizontal: 14, vertical: 28),
         decoration: BoxDecoration(
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(),
               blurRadius: 10,
               offset: Offset(0, 5),
             ),
@@ -62,9 +65,10 @@ class _NavigationState extends State<Navigation> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: Container(
-            color: Colors.black,
+            color: AppColors.grey,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
               child: GNav(
                 backgroundColor: Colors.transparent,
                 color: Colors.grey[400]!, // Inactive color
@@ -79,7 +83,7 @@ class _NavigationState extends State<Navigation> {
                   _buildNavItem('Home', 'assets/icons/Home.svg', 0),
                   _buildNavItem('Support', 'assets/icons/Support.svg', 1),
                   _buildNavItem('Profile', 'assets/icons/Profile.svg', 2),
-                  _buildNavItem('Updates', 'assets/icons/Updates.svg', 3),
+                  _buildNavItem('Updates', 'assets/icons/Bell.svg', 3),
                 ],
               ),
             ),
@@ -93,7 +97,7 @@ class _NavigationState extends State<Navigation> {
     bool isSelected = _selectedIndex == index;
     return GButton(
       icon: Icons.circle,
-      iconColor: Colors.transparent,
+      iconColor: Colors.black,
       leading: _buildSvgIcon(iconPath, isSelected),
       text: label,
       textStyle: TextStyle(
@@ -101,8 +105,7 @@ class _NavigationState extends State<Navigation> {
         fontSize: 14,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),
-      backgroundColor:
-          Colors.grey[900]!.withOpacity(0.3), // Background when selected
+      backgroundColor: Colors.black, // Background when selected
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       margin: EdgeInsets.symmetric(horizontal: 4),
       borderRadius: BorderRadius.circular(20),
