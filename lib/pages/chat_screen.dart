@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
       String displayText = '';
       for (int i = 0; i < response.length; i++) {
         if (_currentAnimatingMessage != chatMessage) break;
-        await Future.delayed(Duration(milliseconds: 2));
+        await Future.delayed(Duration(milliseconds: 1));
         displayText += response[i];
         setState(() {
           chatMessage.text = displayText;

@@ -86,10 +86,10 @@ class SupportPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 const Text(
-                  "Support",
+                  "Support.",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     color: AppColors.black,
                   ),
                 ),
@@ -128,10 +128,10 @@ class SupportPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Resources",
+                  "Resources.",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     color: AppColors.black,
                   ),
                 ),
@@ -189,11 +189,11 @@ class SupportPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "National Toll Free Drug De-\nAddiction Helpline Number",
+                            "National Toll Free\n De-Addiction Helpline.",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              fontWeight: FontWeight.normal,
                               color: AppColors.black,
                             ),
                           ),
@@ -244,11 +244,15 @@ class SupportPage extends StatelessWidget {
               ),
             );
           },
-          backgroundColor: AppColors.lightBlueAccent,
+          backgroundColor: AppColors.black,
           shape: const CircleBorder(),
           elevation: 4.0,
           child: SvgPicture.asset(
             'assets/icons/Chat.svg',
+            colorFilter: ColorFilter.mode(
+              AppColors.darkBlueContrast,
+              BlendMode.srcIn,
+            ),
             height: 30,
             width: 30,
           ),
