@@ -6,27 +6,60 @@ import 'package:url_launcher/url_launcher.dart';
 class SupportPage extends StatelessWidget {
   const SupportPage({super.key});
 
-  void _onReportDrugAbuse() async {
-    final Uri url = Uri.parse('https://www.ncbmanas.gov.in/createTicket');
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
+  // Constants
+  static const String _ncbManasUrl = 'https://www.ncbmanas.gov.in/createTicket';
+  static const String _vimukhtiUrl = 'https://vimukthi.kerala.gov.in/';
+  static const String _helplineNumber = '18001100031';
+
+  /// Launches a URL and shows error message if launch fails
+  Future<void> _launchUrl(BuildContext context, String url) async {
+    // Capture the context in a local variable
+    final currentContext = context;
+    try {
+      if (!await launchUrl(Uri.parse(url))) {
+        if (currentContext.mounted) {
+          _showSnackBar(currentContext, 'Could not launch $url');
+        }
+      }
+    } catch (e) {
+      if (currentContext.mounted) {
+        _showSnackBar(currentContext, 'Error launching URL: $e');
+      }
     }
   }
 
-  void _onSupportSection2() async {
-    final Uri url = Uri.parse('https://vimukthi.kerala.gov.in/');
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
-  void _onSupportSection3() {
-    // Template function for support section 3
-    print('Support Section 3 clicked');
+  void _onReportDrugAbuse(BuildContext context) {
+    _launchUrl(context, _ncbManasUrl);
+  }
+
+  void _onSupportSection2(BuildContext context) {
+    _launchUrl(context, _vimukhtiUrl);
+  }
+
+  Future<void> _callHelpline(BuildContext context) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: _helplineNumber);
+    // Capture the context in a local variable
+    final currentContext = context;
+    try {
+      if (!await launchUrl(phoneUri)) {
+        if (currentContext.mounted) {
+          _showSnackBar(currentContext, 'Could not launch phone dialer');
+        }
+      }
+    } catch (e) {
+      if (currentContext.mounted) {
+        _showSnackBar(currentContext, 'Error launching phone dialer: $e');
+      }
+    }
   }
 
   void _onChatButtonPressed() {
-    print('Chat button pressed');
     // Add your chat functionality here
   }
 
@@ -59,7 +92,7 @@ class SupportPage extends StatelessWidget {
                 // Report Drug Abuse Container
                 Center(
                   child: GestureDetector(
-                    onTap: _onReportDrugAbuse,
+                    onTap: () => _onReportDrugAbuse(context),
                     child: Container(
                       height: 200,
                       width: double.infinity,
@@ -101,7 +134,7 @@ class SupportPage extends StatelessWidget {
                 // Vimukthi Container
                 Center(
                   child: GestureDetector(
-                    onTap: _onSupportSection2,
+                    onTap: () => _onSupportSection2(context),
                     child: Container(
                       height: 200,
                       width: double.infinity,
@@ -131,7 +164,7 @@ class SupportPage extends StatelessWidget {
                 // Helpline Container
                 Center(
                   child: GestureDetector(
-                    onTap: _onSupportSection3,
+                    onTap: () => _callHelpline(context),
                     child: Container(
                       height: 200,
                       width: double.infinity,
@@ -160,24 +193,27 @@ class SupportPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/Phone.svg',
-                                height: 30,
-                                width: 30,
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "1800 - 11 - 0031",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red,
+                          InkWell(
+                            onTap: () => _callHelpline(context),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/Phone.svg',
+                                  height: 30,
+                                  width: 30,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 10),
+                                const Text(
+                                  "1800 - 11 - 0031",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
