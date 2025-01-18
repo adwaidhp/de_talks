@@ -46,45 +46,46 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.symmetric(horizontal: 14, vertical: 28),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(),
-              blurRadius: 10,
-              offset: Offset(0, 5),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            color: AppColors.grey,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-              child: GNav(
-                backgroundColor: Colors.transparent,
-                color: Colors.grey[400]!, // Inactive color
-                activeColor: activeBlue, // Active color - Blue
-                tabBackgroundColor:
-                    Colors.grey[900]!, // Selected tab background
-                gap: 8,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                selectedIndex: _selectedIndex,
-                onTabChange: _navigateBottomBar,
-                tabs: [
-                  _buildNavItem('Home', 'assets/icons/Home.svg', 0),
-                  _buildNavItem('Support', 'assets/icons/Support.svg', 1),
-                  _buildNavItem('Profile', 'assets/icons/Profile.svg', 2),
-                  _buildNavItem('Updates', 'assets/icons/Bell.svg', 3),
-                ],
+    return SafeArea(
+      child: Scaffold(
+        extendBody: true,
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.blackOverlay,
+                  blurRadius: 4,
+                  offset: Offset(5, 5)),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              color: AppColors.grey,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+                child: GNav(
+                  backgroundColor: Colors.transparent,
+                  color: Colors.grey[400]!, // Inactive color
+                  activeColor: activeBlue, // Active color - Blue
+                  tabBackgroundColor:
+                      Colors.grey[900]!, // Selected tab background
+                  gap: 8,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  selectedIndex: _selectedIndex,
+                  onTabChange: _navigateBottomBar,
+                  tabs: [
+                    _buildNavItem('Home', 'assets/icons/Home.svg', 0),
+                    _buildNavItem('Support', 'assets/icons/Support.svg', 1),
+                    _buildNavItem('Profile', 'assets/icons/Profile.svg', 2),
+                    _buildNavItem('Updates', 'assets/icons/Bell.svg', 3),
+                  ],
+                ),
               ),
             ),
           ),
