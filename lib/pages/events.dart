@@ -228,16 +228,24 @@ class _EventCardState extends State<EventCard> {
   }
 }
 
-class EventsPage extends StatelessWidget {
+class EventsPage extends StatefulWidget {
   EventsPage({super.key});
 
+  @override
+  State<EventsPage> createState() => _EventsPageState();
+}
+
+class _EventsPageState extends State<EventsPage> {
   final EventService _eventService = EventService();
   final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: double.infinity,
+        width: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/HomePageBg.png'),
@@ -270,6 +278,7 @@ class EventsPage extends StatelessWidget {
                       'Upcoming Events.',
                       style: AppTextStyles.heading1.copyWith(
                         fontWeight: FontWeight.w500,
+                        fontSize: 24,
                       ),
                     ),
                   ),
@@ -336,7 +345,7 @@ class EventsPage extends StatelessWidget {
                               }
                             },
                           ))
-                      .toList(),
+                      ,
                   const SizedBox(height: 100),
                 ],
               ),
@@ -345,23 +354,55 @@ class EventsPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 100.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreatePage()),
-            );
-          },
-          backgroundColor: AppColors.black,
-          child: SvgPicture.asset(
-            'assets/icons/plus.svg',
-            colorFilter: const ColorFilter.mode(
-              AppColors.darkBlueContrast,
-              BlendMode.srcIn,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom + 5,
+        ),
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: _isHovered ? 120 : 60,
+            height: 60,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreatePage()),
+                );
+              },
+              backgroundColor: AppColors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              elevation: 4.0,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.centerRight,
+                children: [
+                  if (_isHovered)
+                    Positioned(
+                      right: 60,
+                      child: const Text(
+                        'Create',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  Positioned(
+                    right: 15,
+                    child: SvgPicture.asset(
+                      'assets/icons/plus.svg',
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.darkBlueContrast,
+                        BlendMode.srcIn,
+                      ),
+                      height: 30,
+                      width: 30,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            width: 24,
-            height: 24,
           ),
         ),
       ),

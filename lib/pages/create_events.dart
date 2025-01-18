@@ -446,7 +446,7 @@ class _CreatePageState extends State<CreatePage> {
                         ),
                         child: TextField(
                           controller: _descriptionController,
-                          minLines: 2,
+                          minLines: 1,
                           maxLines: null,
                           decoration: InputDecoration(
                             labelText: 'Description',
@@ -489,7 +489,8 @@ class _CreatePageState extends State<CreatePage> {
                         ),
                         child: TextField(
                           controller: _locationController,
-                          maxLines: 1,
+                          minLines: 1,
+                          maxLines: null,
                           decoration: InputDecoration(
                             labelText: 'Location',
                             labelStyle: TextStyle(color: AppColors.black),
