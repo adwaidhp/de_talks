@@ -20,4 +20,7 @@ class AppColors {
 
   // Darker Grey
   static const Color darkerGrey = Color(0xFFB4B4B3);
+
+  // Semi-transparent Black
+  static const Color blackOverlay = Color.fromRGBO(0, 0, 0, 0.25);
 }
