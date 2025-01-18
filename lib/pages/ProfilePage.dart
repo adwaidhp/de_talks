@@ -2,9 +2,28 @@ import 'package:de_talks/colors.dart';
 import 'package:de_talks/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Profilepage extends StatelessWidget {
   const Profilepage({super.key});
+
+  Future<void> _launchSocialMedia(BuildContext context, String url) async {
+    try {
+      if (!await launchUrl(Uri.parse(url))) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not launch $url')),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error launching URL: $e')),
+        );
+      }
+    }
+  }
 
   final String bio =
       "I am on a journey to become the best version of myself. Every day is a new opportunity to grow and learn. Passionate about self-improvement and helping others along the way.";
@@ -39,14 +58,7 @@ class Profilepage extends StatelessWidget {
                           height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.darkBlueContrast,
-                                AppColors.lightBlueAccent
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
+                            color: AppColors.black,
                           ),
                           child: const CircleAvatar(
                             backgroundColor: Colors.transparent,
@@ -80,11 +92,30 @@ class Profilepage extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                SvgPicture.asset('assets/icons/instagram.svg'),
+                                GestureDetector(
+                                  onTap: () => _launchSocialMedia(
+                                    context,
+                                    'https://instagram.com',
+                                  ),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/instagram.svg',
+                                  ),
+                                ),
                                 const SizedBox(width: 10),
-                                SvgPicture.asset(
-                                  'assets/icons/twitter.svg',
-                                  width: 20,
+                                GestureDetector(
+                                  onTap: () => _launchSocialMedia(
+                                    context,
+                                    'https://x.com',
+                                  ),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/Twitter.svg',
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.black,
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 18,
+                                    width: 18,
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
                               ],
@@ -103,9 +134,7 @@ class Profilepage extends StatelessWidget {
                         style: AppTextStyles.bold.copyWith(fontSize: 20),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          // Add edit functionality here
-                        },
+                        onTap: () {},
                         child: SvgPicture.asset('assets/icons/edit.svg'),
                       ),
                     ],
@@ -117,6 +146,13 @@ class Profilepage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.lightBlueAccent,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 4,
+                          color: Color.fromRGBO(0, 0, 0, 0.25),
+                        ),
+                      ],
                     ),
                     child: Text(
                       bio,
@@ -142,6 +178,10 @@ class Profilepage extends StatelessWidget {
                           width: 150,
                           height: 150,
                           decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.black,
+                              width: 2,
+                            ),
                             color: AppColors.grey,
                             shape: BoxShape.circle,
                           ),
