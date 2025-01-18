@@ -68,10 +68,6 @@ class _ChatScreenState extends State<ChatScreen> {
               onSend: _handleSendMessage,
               isTyping: _isTyping,
             ),
-            Container(
-              height: 80,
-              decoration: BoxDecoration(color: Colors.white),
-            )
           ],
         ),
       ),
