@@ -381,11 +381,8 @@ class _CreatePageState extends State<CreatePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Create Event',
-                    style: AppTextStyles.bold.copyWith(
-                      fontSize: 24,
-                      color: AppColors.black,
-                    ),
+                    'Create Event.',
+                    style: AppTextStyles.heading1,
                   ),
                   const SizedBox(height: 30),
                   Center(
@@ -410,6 +407,10 @@ class _CreatePageState extends State<CreatePage> {
                             labelStyle: TextStyle(color: AppColors.black),
                             filled: true,
                             fillColor: AppColors.grey,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 24,
+                            ),
                             prefixIcon: Padding(
                               padding: const EdgeInsets.all(12),
                               child: SvgPicture.asset(
@@ -453,6 +454,10 @@ class _CreatePageState extends State<CreatePage> {
                             labelStyle: TextStyle(color: AppColors.black),
                             filled: true,
                             fillColor: AppColors.grey,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 24,
+                            ),
                             prefixIcon: Padding(
                               padding: const EdgeInsets.all(12),
                               child: SvgPicture.asset(
@@ -496,6 +501,10 @@ class _CreatePageState extends State<CreatePage> {
                             labelStyle: TextStyle(color: AppColors.black),
                             filled: true,
                             fillColor: AppColors.grey,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 24,
+                            ),
                             prefixIcon: Icon(
                               Icons.location_on,
                               color: AppColors.black.withOpacity(0.6),

@@ -1,4 +1,3 @@
-import 'package:de_talks/pages/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:de_talks/colors.dart';
 import 'dart:async';
@@ -10,36 +9,53 @@ class WelcomePage extends StatefulWidget {
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
-  bool _isLoaded = false;
-  Timer? _animationTimer;
-
-  static const int pauseTime = 1000;
-  static const int animationTime = 1500;
-
-  void _startAnimationCycle() {
-    setState(() => _isLoaded = false);
-    Future.delayed(Duration(milliseconds: pauseTime), () {
-      setState(() => _isLoaded = true);
-      Future.delayed(Duration(milliseconds: animationTime + pauseTime), () {
-        setState(() => _isLoaded = false);
-
-        Future.delayed(Duration(milliseconds: animationTime), () {
-          _startAnimationCycle();
-        });
-      });
-    });
-  }
+class _WelcomePageState extends State<WelcomePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _rotationAnimation = Tween<double>(
+      begin: -45 * 3.14159 / 180,
+      end: 0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.6,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
     _startAnimationCycle();
+  }
+
+  void _startAnimationCycle() async {
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (!mounted) return;
+      await _controller.forward();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (!mounted) return;
+      await _controller.reverse();
+    }
   }
 
   @override
   void dispose() {
-    _animationTimer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -74,21 +90,26 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
               ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: animationTime),
-                curve: Curves.easeInOut,
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                transform: Matrix4.identity()
-                  ..translate(190.0, 100.0)
-                  ..rotateZ(_isLoaded ? 0 : -(45 * 3.14159) / 180)
-                  ..scale(_isLoaded ? 1.0 : 0.6)
-                  ..translate(-190.0, -100.0),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: 400,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    alignment: Alignment.center,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.identity()
+                        ..rotateZ(_rotationAnimation.value)
+                        ..scale(_scaleAnimation.value),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 400,
+                        height: 200,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  );
+                },
               ),
               Expanded(
                 child: Container(
@@ -118,8 +139,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       ElevatedButton(
                         onPressed: () {
                           // TODO: Navigate to login/register page
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const RegisterScreen()));
+                          print('Navigate to login/register');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.black,
