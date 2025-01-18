@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:de_talks/text_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' show Random, pi;
 import 'package:de_talks/colors.dart';
@@ -27,9 +29,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String currentQuote;
-  final String username = "Alex";
+  String username = '';
   late List<VideoItem> currentVideos;
   final Random _random = Random();
+  void getUserDetails() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId == null) {
+      return;
+    }
+
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userDoc.exists && userDoc.data() != null) {
+      setState(() {
+        username = userDoc.data()?['name'] ??
+            'User'; // Use 0 as a default if 'count' is not set
+      });
+    }
+  }
 
   static const List<String> quotes = [
     "Stronger than yesterday, braver than ever.",
@@ -198,6 +217,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getUserDetails();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -229,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Text(
-                          "Alex.",
+                          'Hello!',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
