@@ -20,6 +20,11 @@ class SupportPage extends StatelessWidget {
     print('Support Section 3 clicked');
   }
 
+  void _onChatButtonPressed() {
+    print('Chat button pressed');
+    // Add your chat functionality here
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +99,7 @@ class SupportPage extends StatelessWidget {
                 onTap: _onSupportSection2,
                 child: Container(
                   width: 357,
-                  height: 169,
+                  height: 180,
                   padding: const EdgeInsets.all(23),
                   decoration: BoxDecoration(
                     color: AppColors.grey,
@@ -114,8 +119,8 @@ class SupportPage extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/images/vimukthi.png',
-                          height: 95,
-                          width: 400,
+                          height: 124,
+                          width: 500,
                           fit: BoxFit.contain,
                         ),
                         SizedBox(height: 10),
@@ -203,6 +208,18 @@ class SupportPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onChatButtonPressed,
+        backgroundColor: AppColors.lightBlueAccent,
+        shape: const CircleBorder(),
+        elevation: 4.0,
+        child: SvgPicture.asset(
+          'assets/icons/Chat.svg',
+          height: 30,
+          width: 30,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
