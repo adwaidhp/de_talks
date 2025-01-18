@@ -7,7 +7,8 @@ class GroqService {
       'https://api.groq.com/openai/v1/chat/completions';
   final String apiKey;
 
-  GroqService() : apiKey = dotenv.env['GROQ_API_KEY'] ?? '';
+  GroqService()
+      : apiKey = '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';
 
   Future<String> getChatResponse(String message) async {
     final systemPrompt = '''
