@@ -16,6 +16,9 @@ class _CreatePageState extends State<CreatePage> {
   final TextEditingController _locationController = TextEditingController();
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  int _selectedYear = DateTime.now().year;
+  int _selectedMonth = DateTime.now().month;
+  int _selectedDay = DateTime.now().day;
 
   @override
   void dispose() {
@@ -82,6 +85,162 @@ class _CreatePageState extends State<CreatePage> {
         _selectedTime = picked;
       });
     }
+  }
+
+  void _showCustomDatePicker(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 300,
+            width: MediaQuery.of(context).size.width * 0.8,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
+                  color: AppColors.blackOverlay,
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Select Date',
+                    style: AppTextStyles.bold.copyWith(
+                      fontSize: 20,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      // Month Selector
+                      Expanded(
+                        child: ListWheelScrollView(
+                          itemExtent: 50,
+                          children: List.generate(12, (index) {
+                            return Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.black,
+                                  fontWeight: _selectedMonth == index + 1
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            );
+                          }),
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              _selectedMonth = index + 1;
+                              _selectedDate = DateTime(
+                                  _selectedYear, _selectedMonth, _selectedDay);
+                            });
+                          },
+                        ),
+                      ),
+                      // Day Selector
+                      Expanded(
+                        child: ListWheelScrollView(
+                          itemExtent: 50,
+                          children: List.generate(31, (index) {
+                            return Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.black,
+                                  fontWeight: _selectedDay == index + 1
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            );
+                          }),
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              _selectedDay = index + 1;
+                              _selectedDate = DateTime(
+                                  _selectedYear, _selectedMonth, _selectedDay);
+                            });
+                          },
+                        ),
+                      ),
+                      // Year Selector
+                      Expanded(
+                        child: ListWheelScrollView(
+                          itemExtent: 50,
+                          children: List.generate(10, (index) {
+                            int year = DateTime.now().year + index;
+                            return Center(
+                              child: Text(
+                                '$year',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColors.black,
+                                  fontWeight: _selectedYear == year
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            );
+                          }),
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              _selectedYear = DateTime.now().year + index;
+                              _selectedDate = DateTime(
+                                  _selectedYear, _selectedMonth, _selectedDay);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: AppColors.black.withOpacity(0.6),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          'OK',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -248,7 +407,7 @@ class _CreatePageState extends State<CreatePage> {
                           ],
                         ),
                         child: GestureDetector(
-                          onTap: () => _selectDate(context),
+                          onTap: () => _showCustomDatePicker(context),
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -259,10 +418,14 @@ class _CreatePageState extends State<CreatePage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
-                                  child: Icon(
-                                    Icons.calendar_today,
-                                    color: AppColors.black.withOpacity(0.6),
-                                    size: 24,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/calendar.svg',
+                                    colorFilter: ColorFilter.mode(
+                                      AppColors.black.withOpacity(0.6),
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 24,
+                                    width: 24,
                                   ),
                                 ),
                                 Expanded(
@@ -307,10 +470,14 @@ class _CreatePageState extends State<CreatePage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
-                                  child: Icon(
-                                    Icons.access_time,
-                                    color: AppColors.black.withOpacity(0.6),
-                                    size: 24,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/clock.svg',
+                                    colorFilter: ColorFilter.mode(
+                                      AppColors.black.withOpacity(0.6),
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 24,
+                                    width: 24,
                                   ),
                                 ),
                                 Expanded(
