@@ -83,12 +83,7 @@ class _UrgeSurfingPageState extends State<UrgeSurfingPage> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/SurfingBg.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
+        color: AppColors.black,
         child: SafeArea(
           child: Column(
             children: [
