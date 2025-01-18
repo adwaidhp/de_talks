@@ -20,6 +20,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.grey,
         leading: GestureDetector(
           child: Icon(Icons.arrow_back),
           onTap: () {
