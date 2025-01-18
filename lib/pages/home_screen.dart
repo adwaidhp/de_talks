@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:de_talks/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VideoItem {
   final String thumbnail;
@@ -43,8 +44,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildVideoContainer(VideoItem video, int index) {
     return GestureDetector(
-      onTap: () {
-        print('Opening link: ${video.link}');
+      onTap: () async {
+        final Uri url = Uri.parse(video.link);
+        if (await canLaunchUrl(url)) {
+          await launchUrl(url);
+        } else {
+          print('Could not launch $url');
+        }
         replaceVideo(index);
       },
       child: Column(
@@ -127,11 +133,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   static const List<VideoItem> allVideos = [
-    VideoItem(
-      thumbnail: 'assets/images/video1.png',
-      link: 'https://youtu.be/hBC7i-vHWsU?si=MuQUjX2AZmXl6-wi',
-      title: 'What causes addiction, and why is it so hard to treat?',
-    ),
     VideoItem(
       thumbnail: 'assets/images/video2.png',
       link:
