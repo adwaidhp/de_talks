@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Profilepage extends StatelessWidget {
-  const Profilepage({super.key});
+  Profilepage({super.key});
 
   Future<void> _launchSocialMedia(BuildContext context, String url) async {
     try {
@@ -27,6 +27,13 @@ class Profilepage extends StatelessWidget {
 
   final String bio =
       "I am on a journey to become the best version of myself. Every day is a new opportunity to grow and learn. Passionate about self-improvement and helping others along the way.";
+
+  List<EventItem> events = [
+    EventItem(title: 'Hope and Healing', status: 'Organised'),
+    EventItem(title: 'Mental Health Awareness', status: 'Attended'),
+    EventItem(title: 'Stress Management', status: 'Attended'),
+    // Add more items as needed
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +157,7 @@ class Profilepage extends StatelessWidget {
                         BoxShadow(
                           offset: Offset(0, 4),
                           blurRadius: 4,
-                          color: Color.fromRGBO(0, 0, 0, 0.25),
+                          color: Color.fromRGBO(0, 0, 0, 0.553),
                         ),
                       ],
                     ),
@@ -203,94 +210,62 @@ class Profilepage extends StatelessWidget {
                     style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 10),
-                  Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                              color: Color.fromRGBO(0, 0, 0, 0.25),
-                            ),
-                          ],
-                          color: AppColors.grey,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Creating Future',
-                              style: AppTextStyles.bold.copyWith(fontSize: 16),
-                            ),
-                            Container(
-                              width: 80,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                  ListView.builder(
+                    shrinkWrap:
+                        true, // Important when using ListView inside Column
+                    physics:
+                        NeverScrollableScrollPhysics(), // Use this if you want the parent SingleChildScrollView to handle scrolling
+                    itemCount: events.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                offset: Offset(0, 4),
+                                blurRadius: 4,
+                                color: Color.fromRGBO(0, 0, 0, 0.25),
                               ),
-                              decoration: BoxDecoration(
-                                color: AppColors.darkerGrey,
-                                borderRadius: BorderRadius.circular(8),
+                            ],
+                            color: AppColors.grey,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                events[index].title,
+                                style:
+                                    AppTextStyles.bold.copyWith(fontSize: 16),
                               ),
-                              child: Text(
-                                'Attended',
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.bold.copyWith(
-                                  fontSize: 12,
+                              Container(
+                                width: 80,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: events[index].status == 'Organised'
+                                      ? AppColors.lightBlueAccent
+                                      : AppColors.darkerGrey,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  events[index].status,
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyles.bold.copyWith(
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                              color: Color.fromRGBO(0, 0, 0, 0.25),
-                            ),
-                          ],
-                          color: AppColors.grey,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Hope and Healing',
-                              style: AppTextStyles.bold.copyWith(fontSize: 16),
-                            ),
-                            Container(
-                              width: 80,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.lightBlueAccent,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                'Organised',
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.bold.copyWith(
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -300,4 +275,11 @@ class Profilepage extends StatelessWidget {
       ),
     );
   }
+}
+
+class EventItem {
+  final String title;
+  final String status;
+
+  EventItem({required this.title, required this.status});
 }
