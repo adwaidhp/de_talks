@@ -149,7 +149,7 @@ class ChatInputField extends StatelessWidget {
 }
 
 class ChatMessage {
-  final String text;
+  String text;
   final bool isUser;
   final DateTime timestamp;
 
