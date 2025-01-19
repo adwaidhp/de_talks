@@ -238,17 +238,18 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
+                        const SizedBox(height: 16),
                         Text(
                           'Hello, ${username}.',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: AppColors.black,
                           ),
                           textHeightBehavior: const TextHeightBehavior(

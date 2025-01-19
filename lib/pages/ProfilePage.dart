@@ -357,7 +357,11 @@ class _ProfilepageState extends State<Profilepage>
                             ),
                             Row(
                               children: [
-                                Icon(Icons.location_on),
+                                Icon(
+                                  Icons.location_on,
+                                  size: 16,
+                                  color: AppColors.black.withOpacity(0.6),
+                                ),
                                 Text(
                                   '${city.toUpperCase()}',
                                   style: AppTextStyles.bold,
@@ -518,9 +522,36 @@ class _ProfilepageState extends State<Profilepage>
 
                       final events = snapshot.data ?? [];
 
+                      if (events.isEmpty) {
+                        return Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 150, // Reduced height
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/noEvents.png'),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            const Text(
+                              "Your event history will appear here", // Snappier text
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.black,
+                                fontStyle: FontStyle.italic,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        );
+                      }
+
                       return ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: events.length,
                         itemBuilder: (context, index) {
                           final event = events[index];
@@ -595,6 +626,37 @@ class _ProfilepageState extends State<Profilepage>
   Widget _buildProfilePicture() {
     return GestureDetector(
       onTap: _showImagePickerModal,
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: profileImageUrl != null
+                      ? DecorationImage(
+                          image: NetworkImage(profileImageUrl!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                  color: profileImageUrl == null ? AppColors.black : null,
+                ),
+                child: profileImageUrl == null
+                    ? const Icon(
+                        Icons.person,
+                        size: 150,
+                        color: Colors.white,
+                      )
+                    : null,
+              ),
+            );
+          },
+        );
+      },
       child: Stack(
         children: [
           Container(

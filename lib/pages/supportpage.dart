@@ -77,6 +77,51 @@ class _SupportPageState extends State<SupportPage> {
     );
   }
 
+  Widget _buildSupportCard({
+    required String title,
+    required VoidCallback onTap,
+    required Widget child,
+    double height = 160,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.grey,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(0, 4),
+              blurRadius: 4,
+              color: AppColors.blackOverlay,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (title.isNotEmpty) ...[
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.black,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            Expanded(child: Center(child: child)),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,102 +147,69 @@ class _SupportPageState extends State<SupportPage> {
                     color: AppColors.black,
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Report Drug Abuse Container
-                Center(
-                  child: GestureDetector(
-                    onTap: () => _onReportDrugAbuse(context),
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(
+                const SizedBox(height: 30),
+
+                // Report Abuse Card
+                _buildSupportCard(
+                  title: "",
+                  onTap: () => _onReportDrugAbuse(context),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.warning_amber_rounded,
+                          size: 50, color: Colors.red),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Report Drug Abuse",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
                           color: AppColors.black,
-                          width: 2,
-                        ),
-                        color: AppColors.grey,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                            color: AppColors.blackOverlay,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          "🚨 Report Drug Abuse 🚨",
-                          style: AppTextStyles.bold.copyWith(
-                            fontSize: 22,
-                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 50),
-                // Helpline Container
-                Center(
-                  child: GestureDetector(
-                    onTap: () => _callHelpline(context),
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.black,
-                          width: 2,
+                const SizedBox(height: 30),
+
+                // Helpline Card
+                _buildSupportCard(
+                  title: "De-Addiction Helpline",
+                  onTap: () => _callHelpline(context),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
                         ),
-                        color: AppColors.grey,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                            color: AppColors.blackOverlay,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "National Toll Free\n De-Addiction Helpline.",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.bold.copyWith(fontSize: 24),
-                          ),
-                          const SizedBox(height: 16),
-                          InkWell(
-                            onTap: () => _callHelpline(context),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/Phone.svg',
-                                  height: 30,
-                                  width: 30,
-                                ),
-                                const SizedBox(width: 10),
-                                const Text(
-                                  "1800 - 11 - 0031",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.red, width: 2),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.phone,
+                                color: Colors.red, size: 28),
+                            const SizedBox(width: 12),
+                            const Text(
+                              "1800-11-0031",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 60),
+
                 const Text(
                   "Resources.",
                   style: TextStyle(
@@ -206,94 +218,51 @@ class _SupportPageState extends State<SupportPage> {
                     color: AppColors.black,
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Vimukthi Container
-                Center(
-                  child: GestureDetector(
-                    onTap: () => _onSupportSection2(context),
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.black,
-                          width: 2,
-                        ),
-                        color: AppColors.grey,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                            color: AppColors.blackOverlay,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/vimukthi.png',
-                          height: 140,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
+                const SizedBox(height: 30),
+
+                // Vimukthi Card
+                _buildSupportCard(
+                  title: "",
+                  onTap: () => _onSupportSection2(context),
+                  child: Image.asset(
+                    'assets/images/vimukthi.png',
+                    height: 100,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 32),
-                // New UrgeSurfingPage Container
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => UrgeSurfingPage(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(
+                const SizedBox(height: 30),
+
+                // Urge Surfing Card
+                _buildSupportCard(
+                  title: "",
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => UrgeSurfingPage(),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.waves,
+                        size: 50,
+                        color: AppColors.darkBlueContrast,
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Urge Surfing",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
                           color: AppColors.black,
-                          width: 2,
-                        ),
-                        color: AppColors.grey,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 4),
-                            blurRadius: 4,
-                            color: AppColors.blackOverlay,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/caution.svg',
-                              height: 40,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "I have an Urge",
-                              style: AppTextStyles.bold.copyWith(
-                                fontSize: 24,
-                              ),
-                            ),
-                          ],
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 40),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                const SizedBox(height: 120),
               ],
             ),
           ),
