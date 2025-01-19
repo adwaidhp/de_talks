@@ -1,5 +1,6 @@
 import 'package:de_talks/pages/chat_screen.dart';
 import 'package:de_talks/pages/navigation.dart';
+import 'package:de_talks/pages/splash_screen.dart';
 import 'package:de_talks/pages/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: MaterialApp(
-        title: 'De Talks',
+        title: 'De-Talks',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Manjari',
@@ -46,21 +47,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            // Show loading indicator while checking auth state
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            // If user is logged in, show Navigation
-            // If not, show LoginPage
-            return snapshot.hasData ? Navigation() : const WelcomePage();
-          },
-        ),
+        home: SplashScreen(),
       ),
     );
   }
