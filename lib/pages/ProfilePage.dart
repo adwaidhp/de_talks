@@ -391,17 +391,18 @@ class _ProfilepageState extends State<Profilepage>
                     style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 10),
-                  StreamBuilder<List<EventModel>>(
-                    stream: EventService()
-                        .getUserEvents(FirebaseAuth.instance.currentUser!.uid),
+                  FutureBuilder<List<EventModel>>(
+                    future: EventService()
+                        .getUserEvents(FirebaseAuth.instance.currentUser!.uid)
+                        .first,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       }
 
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
+                      // if (snapshot.connectionState == ConnectionState.waiting) {
+                      //   return const CircularProgressIndicator();
+                      // }
 
                       final events = snapshot.data ?? [];
 //Profile
