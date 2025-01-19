@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: MaterialApp(
-        title: 'De-Talks',
+        title: 'DeTalks',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Manjari',
