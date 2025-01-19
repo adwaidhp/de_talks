@@ -193,6 +193,17 @@ class _HomePageState extends State<HomePage> {
       link: 'https://youtu.be/Wh9O3-ciOYs?si=D4cps3c-9a-2mwyr',
       title: 'Finding sobriety on a mountaintop | Scott Strode | TEDxMileHigh',
     ),
+    VideoItem(
+      thumbnail: 'assets/images/video8.png',
+      link: 'https://youtu.be/wQl_4kcE5nw?si=VYmEJu1VF4WnsmqG',
+      title: 'Teen Substance Use & Abuse',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video9.png',
+      link: 'https://youtu.be/RZ5LH634W8s?si=T-hkvK2eOslmxZRE',
+      title: 'How an Addicted Brain Works',
+    ),
+
   ];
 
   List<VideoItem> getRandomVideos(int count) {
