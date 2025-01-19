@@ -7,6 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Profilepage extends StatefulWidget {
   Profilepage({super.key});
@@ -21,8 +25,14 @@ class _ProfilepageState extends State<Profilepage>
   String name = '';
   String city = '';
   bool _isChecked = false;
+  bool _isLoading = false;
   late AnimationController _checkController;
   late Animation<double> _checkAnimation;
+  String? profileImageUrl;
+  final ImagePicker _picker = ImagePicker();
+
+  // Add your ImgBB API key
+  static const String imgbbApiKey = 'YOUR_IMGBB_API_KEY';
 
   @override
   void initState() {
@@ -34,6 +44,7 @@ class _ProfilepageState extends State<Profilepage>
     _checkAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _checkController, curve: Curves.easeInOut),
     );
+    getUserDetails();
   }
 
   @override
@@ -100,23 +111,138 @@ class _ProfilepageState extends State<Profilepage>
     }
   }
 
-  void getUserDetails() async {
+  Future<void> getUserDetails() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
 
-    if (userId == null) {
-      return;
+    try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (userDoc.exists && mounted) {
+        setState(() {
+          count = userDoc.data()?['dayCount'] ?? 0;
+          name = userDoc.data()?['name'] ?? 'User';
+          city = userDoc.data()?['city'] ?? '';
+          profileImageUrl = userDoc.data()?['photoUrl'];
+        });
+      }
+    } catch (e) {
+      print('Error fetching user details: $e');
     }
+  }
 
-    final userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  Future<void> _showImagePickerModal() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Take a photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-    if (userDoc.exists && userDoc.data() != null) {
-      setState(() {
-        count = userDoc.data()?['dayCount'] ?? 0;
-        name = userDoc.data()?['name'] ?? 'Alex';
-        city = userDoc.data()?['city'] ??
-            'Thrissur'; // Use 0 as a default if 'count' is not set
-      });
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 75,
+      );
+
+      if (image != null) {
+        await _uploadImage(File(image.path));
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error picking image')),
+        );
+      }
+    }
+  }
+
+  Future<void> _uploadImage(File imageFile) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    try {
+      setState(() => _isLoading = true);
+
+      // Convert image file to base64
+      final bytes = await imageFile.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      // Create multipart request
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('https://api.imgbb.com/1/upload'),
+      );
+
+      // Add API key and image data
+      request.fields['key'] = 'ae7a83f0653ab1f0b48a82f890757514';
+      request.fields['image'] = base64Image;
+
+      // Send request
+      final response = await request.send();
+      final responseData = await response.stream.bytesToString();
+      final jsonData = json.decode(responseData);
+
+      if (response.statusCode == 200) {
+        final imageUrl = jsonData['data']['url'];
+
+        // Update Firestore with new image URL
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .update({'photoUrl': imageUrl});
+
+        // Update UI
+        if (mounted) {
+          setState(() {
+            profileImageUrl = imageUrl;
+            _isLoading = false;
+          });
+        }
+      } else {
+        throw Exception(
+            'Failed to upload image: ${jsonData['error']['message']}');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error uploading image: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -183,7 +309,6 @@ class _ProfilepageState extends State<Profilepage>
 
   @override
   Widget build(BuildContext context) {
-    getUserDetails();
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -205,19 +330,7 @@ class _ProfilepageState extends State<Profilepage>
                     width: double.infinity,
                     child: Row(
                       children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.black,
-                          ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            child: Icon(Icons.person,
-                                size: 50, color: Colors.white),
-                          ),
-                        ),
+                        _buildProfilePicture(),
                         const SizedBox(width: 20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,7 +488,7 @@ class _ProfilepageState extends State<Profilepage>
                           ),
                           child: Center(
                             child: SvgPicture.asset(
-                              'assets/icons/badge${(index % 6) + 1}.svg',
+                              'assets/icons/badge${index % 6 + 1}.svg',
                               width: 100,
                               height: 100,
                               fit: BoxFit.contain,
@@ -391,21 +504,20 @@ class _ProfilepageState extends State<Profilepage>
                     style: AppTextStyles.bold.copyWith(fontSize: 20),
                   ),
                   const SizedBox(height: 10),
-                  FutureBuilder<List<EventModel>>(
-                    future: EventService()
-                        .getUserEvents(FirebaseAuth.instance.currentUser!.uid)
-                        .first,
+                  StreamBuilder<List<EventModel>>(
+                    stream: EventService()
+                        .getUserEvents(FirebaseAuth.instance.currentUser!.uid),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       }
 
-                      // if (snapshot.connectionState == ConnectionState.waiting) {
-                      //   return const CircularProgressIndicator();
-                      // }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
 
                       final events = snapshot.data ?? [];
-//Profile
+
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -476,6 +588,59 @@ class _ProfilepageState extends State<Profilepage>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProfilePicture() {
+    return GestureDetector(
+      onTap: _showImagePickerModal,
+      child: Stack(
+        children: [
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.black,
+            ),
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  )
+                : profileImageUrl != null
+                    ? CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(profileImageUrl!),
+                        backgroundColor: Colors.transparent,
+                      )
+                    : const CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.transparent,
+                        child:
+                            Icon(Icons.person, size: 50, color: Colors.white),
+                      ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.black,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: const Icon(
+                Icons.camera_alt,
+                size: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
