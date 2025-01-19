@@ -1,7 +1,7 @@
 import 'package:de_talks/pages/chat_screen.dart';
 import 'package:de_talks/pages/navigation.dart';
-import 'package:de_talks/pages/splash_screen.dart';
 import 'package:de_talks/pages/welcome_screen.dart';
+import 'package:de_talks/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';

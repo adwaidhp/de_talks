@@ -51,11 +51,10 @@ dependencies:
   firebase_messaging: ^14.7.4
   image_picker: ^1.0.7
   firebase_storage: ^11.6.0
-  flutter_launcher_icons: ^0.14.3
+  # flutter_launcher_icons: ^0.14.3
 #  flutter_local_notifications: ^16.1.0
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
 
@@ -105,21 +104,21 @@ flutter_launcher_icons:
         - asset: assets/fonts/Manjari-Thin.ttf
           weight: 100
       
-flutter_launcher_icons:
+# flutter_launcher_icons:
 
-  android: "ic_launcher"
+#   android: "ic_launcher"
 
-  ios: true
+#   ios: true
 
-  image_path: "assets/icons/ic_launcher.png"
+#   image_path: "assets/icons/ic_launcher.png"
 
-  min_sdk_android: 21 # android min sdk min:16, default 21
+#   min_sdk_android: 21 # android min sdk min:16, default 21
 
-  adaptive_icon_background: "#FFFFFF" # only available for Android 8.0 devices and above
+#   adaptive_icon_background: "#FFFFFF" # only available for Android 8.0 devices and above
 
-  adaptive_icon_foreground: "assets/icons/ic_launcher_foreground.png" # only available for Android 8.0 devices and above
+#   adaptive_icon_foreground: "assets/icons/ic_launcher_foreground.png" # only available for Android 8.0 devices and above
 
 
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+#   #
+#   # For details regarding fonts from package dependencies,
+#   # see https://flutter.dev/to/font-from-package
