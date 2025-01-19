@@ -360,7 +360,7 @@ class _ProfilepageState extends State<Profilepage>
                                   color: AppColors.black.withOpacity(0.6),
                                 ),
                                 Text(
-                                  '${city}',
+                                  '${city.substring(0, 1).toUpperCase() + city.substring(1)}',
                                   style: AppTextStyles.bold,
                                 )
                               ],
