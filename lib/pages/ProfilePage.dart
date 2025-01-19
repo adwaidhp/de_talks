@@ -375,7 +375,7 @@ class _ProfilepageState extends State<Profilepage>
                           ),
                           child: Center(
                             child: SvgPicture.asset(
-                              'assets/icons/badge${index % 6 + 1}.svg',
+                              'assets/icons/badge${(index % 6) + 1}.svg',
                               width: 100,
                               height: 100,
                               fit: BoxFit.contain,
