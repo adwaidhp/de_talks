@@ -200,8 +200,13 @@ class _HomePageState extends State<HomePage> {
     ),
     VideoItem(
       thumbnail: 'assets/images/video9.png',
-      link: 'https://youtu.be/RZ5LH634W8s?si=T-hkvK2eOslmxZRE',
-      title: 'How an Addicted Brain Works',
+      link: 'https://youtu.be/s0bqT_hxMwI?si=409hsRUxkgq1AuNZ',
+      title: 'Addiction & the Brain',
+    ),
+    VideoItem(
+      thumbnail: 'assets/images/video10.png',
+      link: 'https://youtu.be/xnJ814OsZJo?si=fF4K6URFZDgta5tw',
+      title: 'Understanding addiction to support recovery ',
     ),
 
   ];
