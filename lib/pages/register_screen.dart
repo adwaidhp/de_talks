@@ -100,7 +100,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     "Let's begin.",
                     style: AppTextStyles.bold.copyWith(
                       fontSize: 24,
-                      color: AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 30),

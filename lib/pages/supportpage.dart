@@ -139,12 +139,10 @@ class _SupportPageState extends State<SupportPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   "Support.",
-                  style: TextStyle(
+                  style: AppTextStyles.bold.copyWith(
                     fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    color: AppColors.black,
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -210,12 +208,10 @@ class _SupportPageState extends State<SupportPage> {
                 ),
                 const SizedBox(height: 60),
 
-                const Text(
+                Text(
                   "Resources.",
-                  style: TextStyle(
+                  style: AppTextStyles.bold.copyWith(
                     fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    color: AppColors.black,
                   ),
                 ),
                 const SizedBox(height: 30),

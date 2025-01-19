@@ -31,9 +31,6 @@ class _ProfilepageState extends State<Profilepage>
   String? profileImageUrl;
   final ImagePicker _picker = ImagePicker();
 
-  // Add your ImgBB API key
-  static const String imgbbApiKey = 'YOUR_IMGBB_API_KEY';
-
   @override
   void initState() {
     super.initState();
@@ -342,7 +339,7 @@ class _ProfilepageState extends State<Profilepage>
                             Row(
                               children: [
                                 Text(
-                                  'Streak ',
+                                  'Streak : ',
                                   style:
                                       AppTextStyles.bold.copyWith(fontSize: 16),
                                 ),
@@ -363,7 +360,7 @@ class _ProfilepageState extends State<Profilepage>
                                   color: AppColors.black.withOpacity(0.6),
                                 ),
                                 Text(
-                                  '${city.toUpperCase()}',
+                                  '${city}',
                                   style: AppTextStyles.bold,
                                 )
                               ],
@@ -404,7 +401,9 @@ class _ProfilepageState extends State<Profilepage>
                   const SizedBox(height: 30),
                   Text(
                     "Today's Pledge.",
-                    style: AppTextStyles.bold.copyWith(fontSize: 20),
+                    style: AppTextStyles.bold.copyWith(
+                      fontSize: 24,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Container(
@@ -470,7 +469,9 @@ class _ProfilepageState extends State<Profilepage>
                   const SizedBox(height: 30),
                   Text(
                     'Badges.',
-                    style: AppTextStyles.bold.copyWith(fontSize: 20),
+                    style: AppTextStyles.bold.copyWith(
+                      fontSize: 24,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   SingleChildScrollView(
@@ -505,7 +506,9 @@ class _ProfilepageState extends State<Profilepage>
                   const SizedBox(height: 30),
                   Text(
                     'Past Events.',
-                    style: AppTextStyles.bold.copyWith(fontSize: 20),
+                    style: AppTextStyles.bold.copyWith(
+                      fontSize: 24,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   StreamBuilder<List<EventModel>>(

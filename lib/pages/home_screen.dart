@@ -247,10 +247,8 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 16),
                         Text(
                           'Hello, ${username}.',
-                          style: TextStyle(
+                          style: AppTextStyles.bold.copyWith(
                             fontSize: 24,
-                            fontWeight: FontWeight.normal,
-                            color: AppColors.black,
                           ),
                           textHeightBehavior: const TextHeightBehavior(
                             applyHeightToFirstAscent: false,
@@ -301,11 +299,10 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Here are some things to inspire you.',
-                            style: TextStyle(
+                            style: AppTextStyles.bold.copyWith(
                               fontSize: 24,
-                              color: AppColors.black,
                             ),
                             textHeightBehavior: TextHeightBehavior(
                               applyHeightToFirstAscent: false,

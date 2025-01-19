@@ -128,7 +128,10 @@ class _UrgeSurfingPageState extends State<UrgeSurfingPage> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: AppColors.darkBlueContrast,
+                      ),
                       onPressed: () => Navigator.pop(context),
                     ),
                     Text(

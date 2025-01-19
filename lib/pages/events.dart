@@ -121,7 +121,7 @@ class _EventCardState extends State<EventCard> {
             ),
           ),
           Positioned(
-            bottom: 16,
+            bottom: 24,
             right: 24,
             child: GestureDetector(
               onTap: widget.onEdit,
@@ -277,8 +277,7 @@ class _EventsPageState extends State<EventsPage> {
                     ),
                     child: Text(
                       'Upcoming Events.',
-                      style: AppTextStyles.heading1.copyWith(
-                        fontWeight: FontWeight.w500,
+                      style: AppTextStyles.bold.copyWith(
                         fontSize: 24,
                       ),
                     ),

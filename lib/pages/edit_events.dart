@@ -226,7 +226,9 @@ class _EditEventPageState extends State<EditEventPage> {
                       ),
                       Text(
                         'Edit Event.',
-                        style: AppTextStyles.heading1,
+                        style: AppTextStyles.bold.copyWith(
+                          fontSize: 24,
+                        ),
                       ),
                     ],
                   ),

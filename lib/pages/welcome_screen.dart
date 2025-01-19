@@ -78,7 +78,7 @@ class _WelcomePageState extends State<WelcomePage>
                 padding: const EdgeInsets.all(16.0),
                 child: Center(
                   child: Text(
-                    'Welcome to Detalks.',
+                    'Welcome to DeTalks.',
                     style: const TextStyle(
                       fontSize: 40,
                       color: AppColors.black,

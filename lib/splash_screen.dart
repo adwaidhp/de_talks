@@ -21,22 +21,24 @@ class _SplashScreenState extends State<SplashScreen>
     _iconController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    )..repeat(reverse: true); 
+    )..repeat(reverse: true);
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            // Show loading indicator while checking auth state
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return snapshot.hasData ? Navigation() : const WelcomePage();
-          },
-        ),),
+        MaterialPageRoute(
+          builder: (context) => StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              // Show loading indicator while checking auth state
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return snapshot.hasData ? Navigation() : const WelcomePage();
+            },
+          ),
+        ),
       );
     });
   }
@@ -77,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
                 return Opacity(
                   opacity: value,
                   child: const Text(
-                    'Welcome to De-Talks',
+                    'Welcome to DeTalks',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

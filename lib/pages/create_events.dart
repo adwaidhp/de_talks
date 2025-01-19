@@ -262,7 +262,9 @@ class _CreatePageState extends State<CreatePage> {
                 children: [
                   Text(
                     'Create Event.',
-                    style: AppTextStyles.heading1,
+                    style: AppTextStyles.bold.copyWith(
+                      fontSize: 24,
+                    ),
                   ),
                   const SizedBox(height: 30),
                   Center(

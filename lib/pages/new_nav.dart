@@ -22,8 +22,8 @@ class _NavState extends State<Nav> {
   final List<Widget> _pages = [
     HomePage(),
     Scaffold(body: Center(child: Text('Support'))),
-    Scaffold(body: Center(child: Text('Profile'))),
     Scaffold(body: Center(child: Text('Updates'))),
+    Scaffold(body: Center(child: Text('Profile'))),
   ];
 
   @override
@@ -96,14 +96,14 @@ class _NavState extends State<Nav> {
                   icon: Icons.circle,
                   iconColor: Colors.transparent,
                   leading: Image.asset(
-                    "assets/png_icons/Profile.png",
+                    "assets/png_icons/Updates.png",
                     height: 24,
                     width: 24,
-                    color: _selectedIndex == 2
+                    color: _selectedIndex == 3
                         ? AppColors.darkBlueContrast
                         : Colors.black.withOpacity(0.7),
                   ),
-                  text: 'Profile',
+                  text: 'Updates',
                   textStyle: TextStyle(
                     color: AppColors.darkBlueContrast,
                     fontWeight: FontWeight.bold,
@@ -114,14 +114,14 @@ class _NavState extends State<Nav> {
                   icon: Icons.circle,
                   iconColor: Colors.transparent,
                   leading: Image.asset(
-                    "assets/png_icons/Updates.png",
+                    "assets/png_icons/Profile.png",
                     height: 24,
                     width: 24,
-                    color: _selectedIndex == 3
+                    color: _selectedIndex == 2
                         ? AppColors.darkBlueContrast
                         : Colors.black.withOpacity(0.7),
                   ),
-                  text: 'Updates',
+                  text: 'Profile',
                   textStyle: TextStyle(
                     color: AppColors.darkBlueContrast,
                     fontWeight: FontWeight.bold,

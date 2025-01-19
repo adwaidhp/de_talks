@@ -99,10 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Login',
+                    'Login.',
                     style: AppTextStyles.bold.copyWith(
                       fontSize: 24,
-                      color: AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 20),
